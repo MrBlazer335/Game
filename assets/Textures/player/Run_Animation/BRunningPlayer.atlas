@@ -1,0 +1,27 @@
+BRunningPlayer.png
+size:512,64
+repeat:none
+frame 0
+bounds:36,2,32,32
+frame 10
+bounds:70,2,32,32
+frame 11
+bounds:70,2,32,32
+frame 2
+bounds:138,2,32,32
+frame 1
+bounds:138,2,32,32
+frame 3
+bounds:240,2,32,32
+frame 5
+bounds:104,2,32,32
+frame 4
+bounds:104,2,32,32
+frame 6
+bounds:206,2,32,32
+frame 8
+bounds:2,2,32,32
+frame 7
+bounds:2,2,32,32
+frame 9
+bounds:172,2,32,32

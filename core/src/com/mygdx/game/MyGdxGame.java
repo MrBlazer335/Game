@@ -16,6 +16,7 @@ import com.mygdx.game.Level_maker.Level_maker;
 import com.mygdx.game.Level_maker.Player;
 
 public class MyGdxGame extends ApplicationAdapter {
+    private int Health = 3;
     SpriteBatch batch;
     OrthographicCamera camera;
     OrthogonalTiledMapRenderer mapRender;
@@ -52,6 +53,7 @@ public class MyGdxGame extends ApplicationAdapter {
         mapRender.render();
         batch.end();
         level.getWorld().step(1 / 30f, 6, 2);
+
     }
 
     @Override

@@ -18,7 +18,7 @@ public class Level_maker {
     World world;
 
     public Level_maker(String level) {
-        world = new World(new Vector2(0, -5), true);
+        world = new World(new Vector2(0, -10), true);
         map = new TmxMapLoader().load(level);
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
@@ -53,7 +53,7 @@ public class Level_maker {
         Vector2[] WorldVertices = new Vector2[vertices.length / 2];
 
         for (int i = 0; i < vertices.length / 2; i++) {
-            Vector2 current = new Vector2(vertices[i * 2] , vertices[i * 2 + 1] - 17);
+            Vector2 current = new Vector2(vertices[i * 2] -17 , vertices[i * 2 + 1] - 17);
             WorldVertices[i] = current;
         }
         PolygonShape shape = new PolygonShape();
