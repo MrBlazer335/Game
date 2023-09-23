@@ -1,0 +1,7 @@
+unnamed.png
+size:512,64
+repeat:none
+Run (32x32)
+bounds:2,2,384,32
+split:32,32,32,32
+pad:10,32,10,32

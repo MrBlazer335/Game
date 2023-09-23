@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -17,7 +19,9 @@ public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     OrthographicCamera camera;
     OrthogonalTiledMapRenderer mapRender;
-    World world;
+    MapObjects mapObjects;
+    MapLayer mapLayer;
+
     TiledMap map;
 
     Level_maker level;
@@ -27,10 +31,11 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        world = new World(new Vector2(0, -5), true);
-        player = new Player(world);
-        level = new Level_maker("test.tmx",world);
-        map = new TmxMapLoader().load("test.tmx");
+        level = new Level_maker("LEVEL_1.tmx");
+        player = new Player(level.getWorld());
+        map = new TmxMapLoader().load("LEVEL_1.tmx");
+        mapObjects = map.getLayers().get("physics").getObjects();
+        level.parseTiledObjectLayer(mapObjects);
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -46,7 +51,7 @@ public class MyGdxGame extends ApplicationAdapter {
         camera.update();
         mapRender.render();
         batch.end();
-        world.step(1/60f,6,2);
+        level.getWorld().step(1 / 30f, 6, 2);
     }
 
     @Override

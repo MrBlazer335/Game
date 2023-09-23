@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="57" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="3">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="57" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="5">
  <tileset firstgid="1" source="Textures/Terrain (16x16).tsx"/>
  <tileset firstgid="163" source="Textures/first_lvl.tsx"/>
  <tileset firstgid="172" source="Textures/Idle.tsx"/>
@@ -65,7 +65,9 @@
 </data>
  </layer>
  <objectgroup id="3" name="physics">
-  <object id="2" x="0.0833333" y="640.667" width="1599.25" height="30.6667"/>
+  <object id="4" x="0.5" y="640.25">
+   <polygon points="0,0 -0.25,31.75 1599.14,31.9318 1599.32,0.295455"/>
+  </object>
  </objectgroup>
  <layer id="2" name="terrain_look" width="100" height="57">
   <data encoding="csv">
