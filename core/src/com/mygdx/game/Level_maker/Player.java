@@ -15,7 +15,7 @@ import com.mygdx.game.input.InputSystem;
 
 public class Player extends InputAdapter {
 
-    private static final float MAX_VELOCITY = 50f;
+    private static final float MAX_VELOCITY = 150f;
 
     boolean onTheGround = true;
     int jumpCounter = 0;
@@ -40,7 +40,7 @@ public class Player extends InputAdapter {
 
     Facing facing = Facing.RIGHT;
 
-    enum Player_state {Running, Staying, Jumping, Falling,DoubleJumping}
+    enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping}
 
     Player_state CurrentState = Player_state.Staying;
     float elapsedTime;
@@ -103,23 +103,26 @@ public class Player extends InputAdapter {
             this.body.applyLinearImpulse(-2.80f * PlayersSpeed, 0, pos.x, pos.y, true);
             CurrentState = Player_state.Running;
             facing = Facing.LEFT;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && vel.x < MAX_VELOCITY) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D) && vel.x < MAX_VELOCITY) {
             this.body.applyLinearImpulse(2.80f * PlayersSpeed, 0, pos.x, pos.y, true);
             CurrentState = Player_state.Running;
             facing = Facing.RIGHT;
+        } else {
+            // Если ни одна из клавиш не нажата, установите линейный импульс в противоположное направление, чтобы остановить движение.
+            float stopImpulse = -vel.x * this.body.getMass(); // Примените импульс, противоположный текущей скорости
+            this.body.applyLinearImpulse(stopImpulse, 0, pos.x, pos.y, true);
+            CurrentState = Player_state.Staying;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W) && vel.y < MAX_VELOCITY && onTheGround) {
             this.body.applyLinearImpulse(0, 102.80f * PlayersSpeed, pos.x, pos.y, true);
-            CurrentState = Player_state.Jumping;
             jumpCounter += 1;
             if (jumpCounter == 1) {
-                System.out.println(jumpCounter);
+                CurrentState = Player_state.Jumping;
             } else {
                 CurrentState = Player_state.DoubleJumping;
                 jumpCounter = 0;
             }
+
 
         }
         if (this.body.getLinearVelocity().len() == 0) {
@@ -128,6 +131,7 @@ public class Player extends InputAdapter {
         if (vel.y < -5) {
             CurrentState = Player_state.Falling;
         }
+
         elapsedTime += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
