@@ -225,7 +225,7 @@ public class Player extends InputAdapter {
         if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.LEFT)) {
             animation = new Animation<TextureRegion>(1 / 10f, BIdlePlayer.getRegions());
         }
-        batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x-16,pos.y-16);
+        batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x-16,pos.y-12.5f);
 
     }
 
