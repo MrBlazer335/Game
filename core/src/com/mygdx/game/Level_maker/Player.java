@@ -53,6 +53,8 @@ public class Player extends InputAdapter {
     float elapsedTime;
     InputSystem inputSystem;
 
+
+
     public Player(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -92,7 +94,7 @@ public class Player extends InputAdapter {
         fixtureDef = new FixtureDef();
         fixtureDef.shape = playerShape;
         fixtureDef.density = 0.1f;
-        fixtureDef.friction = 1.6f;
+        fixtureDef.friction = 0.1f;
         body.createFixture(fixtureDef);
         body.setFixedRotation(true);
 
@@ -120,45 +122,6 @@ public class Player extends InputAdapter {
             ontheGround = false;
         }
 
-        /*
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -MAX_VELOCITY) {
-            this.body.applyLinearImpulse(-2.80f * PlayersSpeed, 0, pos.x, pos.y, true);
-            CurrentState = Player_state.Running;
-            facing = Facing.LEFT;
-
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D) && vel.x < MAX_VELOCITY) {
-            this.body.applyLinearImpulse(2.80f * PlayersSpeed, 0, pos.x, pos.y, true);
-            CurrentState = Player_state.Running;
-            facing = Facing.RIGHT;
-        } else {
-            // Если ни одна из клавиш не нажата, установите линейный импульс в противоположное направление, чтобы остановить движение.
-            float stopImpulse = -vel.x * this.body.getMass(); // Примените импульс, противоположный текущей скорости
-            this.body.applyLinearImpulse(stopImpulse, 0, pos.x, pos.y, true);
-            CurrentState = Player_state.Staying;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && vel.y < MAX_VELOCITY) {
-            this.body.setLinearVelocity(0f,6.29f);
-            this.body.applyLinearImpulse(0f, 10.80f, pos.x, pos.y, true);
-            System.out.println(jumpCounter);
-            jumpCounter += 1;
-            if (jumpCounter == 1) {
-                CurrentState = Player_state.Jumping;
-            } else {
-                CurrentState = Player_state.DoubleJumping;
-                jumpCounter = 0;
-            }
-
-
-        }
-        if (this.body.getLinearVelocity().len() == 0) {
-            CurrentState = Player_state.Staying;
-        }
-        if (vel.y < -5) {
-            CurrentState = Player_state.Falling;
-        }
-        System.out.println(this.body.getMass());
-
-         */
 
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             facing = Facing.LEFT;
@@ -198,35 +161,46 @@ public class Player extends InputAdapter {
 
 
         if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.RIGHT) && ontheGround) {
-            animation = new Animation<TextureRegion>(1 / 10f, RunningPlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, RunningPlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.LEFT) && ontheGround) {
-            animation = new Animation<TextureRegion>(1 / 10f, BRunningPlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, BRunningPlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Jumping) && facing == Facing.RIGHT) {
-            animation = new Animation<TextureRegion>(1 / 10f, JumpingPlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, JumpingPlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Jumping) && facing == Facing.LEFT) {
-            animation = new Animation<TextureRegion>(1 / 10f, BJumpingPlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, BJumpingPlayer.getRegions());
         }
 
         if (CurrentState.equals(Player_state.DoubleJumping)) {
-            animation = new Animation<TextureRegion>(1 / 10f, DoubleJump.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, DoubleJump.getRegions());
         }
         if (CurrentState.equals(Player_state.Falling) && facing == Facing.RIGHT) {
-            animation = new Animation<TextureRegion>(1 / 10f, FallingPlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, FallingPlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Falling) && facing == Facing.LEFT) {
-            animation = new Animation<TextureRegion>(1 / 10f, BFallingPlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, BFallingPlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.RIGHT)) {
-            animation = new Animation<TextureRegion>(1 / 10f, IdlePlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, IdlePlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.LEFT)) {
-            animation = new Animation<TextureRegion>(1 / 10f, BIdlePlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 20f, BIdlePlayer.getRegions());
         }
         batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x-16,pos.y-12.5f);
 
+    }
+    public float CameraCordsX(){
+        Vector2 vector2 = new Vector2();
+        vector2 =this.body.getPosition();
+        return vector2.x;
+    }
+
+   public float CameraCordsY(){
+        Vector2 vector2 = new Vector2();
+        vector2 = this.body.getPosition();
+        return vector2.y;
     }
 
     public void dispose() {

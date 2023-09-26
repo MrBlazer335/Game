@@ -52,11 +52,13 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.begin();
         player.render(batch);
         mapRender.setView(camera);
+        camera.position.set(player.CameraCordsX(),player.CameraCordsY(),0);
         camera.update();
+        camera.zoom = 0.25f;
         mapRender.render();
         //debugRenderer.render(level.getWorld(),camera.combined);
         batch.end();
-        level.getWorld().step(1 / 30f, 6, 2);
+        level.getWorld().step(1 / 15f, 6, 2);
 
     }
 
