@@ -18,7 +18,7 @@ public class Level_maker {
     World world;
 
     public Level_maker(String level) {
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -9.8f), true);
         map = new TmxMapLoader().load(level);
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
