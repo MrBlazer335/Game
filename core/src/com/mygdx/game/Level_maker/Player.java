@@ -27,16 +27,25 @@ public class Player extends InputAdapter {
     private TextureAtlas IdlePlayer;
     private TextureAtlas BIdlePlayer;
     private TextureAtlas JumpingPlayer;
+    private TextureAtlas BJumpingPlayer;
     private TextureAtlas DoubleJump;
     private TextureAtlas FallingPlayer;
+    private TextureAtlas BFallingPlayer;
     private TextureAtlas BRunningPlayer;
 
+    void ShowSide() {
+        System.out.println(facing);
+    }
+
+    void ShowStatus() {
+        System.out.println(CurrentState);
+    }
 
     Animation<TextureRegion> animation;
 
     enum Facing {LEFT, RIGHT}
 
-    Facing facing = Facing.RIGHT;
+    Facing facing = Facing.LEFT;
 
     enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping}
 
@@ -52,19 +61,23 @@ public class Player extends InputAdapter {
 
         body = world.createBody(bodyDef);
 
-        RunningPlayer = new TextureAtlas("Textures/player/Run_Animation/RunningFrog.atlas");
+        RunningPlayer = new TextureAtlas("Textures/player/Animation/RunningFrog.atlas");
 
-        BRunningPlayer = new TextureAtlas("Textures/player/Run_Animation/BRunningPlayer.atlas");
+        BRunningPlayer = new TextureAtlas("Textures/player/BAnimation/BRunningPlayer.atlas");
 
-        JumpingPlayer = new TextureAtlas("Textures/player/Idle_Animation/Jumping.atlas");
+        JumpingPlayer = new TextureAtlas("Textures/player/Animation/Jumping.atlas");
 
-        DoubleJump = new TextureAtlas("Textures/player/Idle_Animation1/DoubleJump.atlas");
+        BJumpingPlayer = new TextureAtlas("Textures/player/BAnimation/BJumping.atlas");
 
-        IdlePlayer = new TextureAtlas("Textures/player/Idle_Animation/Idle_Animation.atlas");
+        DoubleJump = new TextureAtlas("Textures/player/Animation/DoubleJump.atlas");
 
-        BIdlePlayer = new TextureAtlas("Textures/player/Idle_Animation/BIdle_Animation.atlas");
+        IdlePlayer = new TextureAtlas("Textures/player/Animation/Idle_Animation.atlas");
 
-        FallingPlayer = new TextureAtlas("Textures/player/Idle_Animation/FallingPlayer.atlas");
+        BIdlePlayer = new TextureAtlas("Textures/player/BAnimation/BIdle_Animation.atlas");
+
+        FallingPlayer = new TextureAtlas("Textures/player/Animation/FallingPlayer.atlas");
+
+        BFallingPlayer = new TextureAtlas("Textures/player/BAnimation/BFall.atlas");
 
 
         inputSystem = new InputSystem();
@@ -72,22 +85,28 @@ public class Player extends InputAdapter {
 
 
         playerShape = new PolygonShape();
-        float width = 32;
-        float height = 32;
+        float width = 25;
+        float height = 22;
         playerShape.setAsBox(width / 2, height / 2);
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = playerShape;
         fixtureDef.density = 0.1f;
-        fixtureDef.friction = 0.4f;
+        fixtureDef.friction = 1.6f;
         body.createFixture(fixtureDef);
+        body.setFixedRotation(true);
 
 
     }
 
     public void render(SpriteBatch batch) {
-        position_x = body.getPosition().x;
-        position_y = body.getPosition().y;
+        // ShowSide();
+        //ShowStatus();
+
+
+        Vector2 CharacterPosition = body.getPosition();
+        //position_x = body.getPosition().x;
+        //position_y = body.getPosition().y;
 
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();
@@ -152,17 +171,16 @@ public class Player extends InputAdapter {
             this.body.applyLinearImpulse(PlayersSpeed, vel.y, pos.x, pos.y, true);
             CurrentState = Player_state.Running;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && CurrentState != Player_state.DoubleJumping || Gdx.input.isKeyJustPressed(Input.Keys.UP) ) {
-            this.body.applyLinearImpulse(vel.x, 1500f, pos.x, pos.y, true);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && ontheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && ontheGround) {
+            this.body.applyLinearImpulse(vel.x, 1700f, pos.x, pos.y, true);
             CurrentState = Player_state.Jumping;
             jumpCounter++;
-            System.out.println(jumpCounter);
         }
-            else if(jumpCounter == 2){
+       else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && jumpCounter == 1 ){
+            this.body.applyLinearImpulse(vel.x, 1500f, pos.x, pos.y, true);
             CurrentState = Player_state.DoubleJumping;
-                jumpCounter = 0;
-
-            }
+            jumpCounter = 0;
+        }
 
 
         if (vel.y < -2.5f && !ontheGround) {
@@ -185,15 +203,21 @@ public class Player extends InputAdapter {
         if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.LEFT) && ontheGround) {
             animation = new Animation<TextureRegion>(1 / 10f, BRunningPlayer.getRegions());
         }
-        if (CurrentState.equals(Player_state.Jumping)) {
+        if (CurrentState.equals(Player_state.Jumping) && facing == Facing.RIGHT) {
             animation = new Animation<TextureRegion>(1 / 10f, JumpingPlayer.getRegions());
-
         }
+        if (CurrentState.equals(Player_state.Jumping) && facing == Facing.LEFT) {
+            animation = new Animation<TextureRegion>(1 / 10f, BJumpingPlayer.getRegions());
+        }
+
         if (CurrentState.equals(Player_state.DoubleJumping)) {
             animation = new Animation<TextureRegion>(1 / 10f, DoubleJump.getRegions());
         }
-        if (CurrentState.equals(Player_state.Falling)) {
+        if (CurrentState.equals(Player_state.Falling) && facing == Facing.RIGHT) {
             animation = new Animation<TextureRegion>(1 / 10f, FallingPlayer.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Falling) && facing == Facing.LEFT) {
+            animation = new Animation<TextureRegion>(1 / 10f, BFallingPlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.RIGHT)) {
             animation = new Animation<TextureRegion>(1 / 10f, IdlePlayer.getRegions());
@@ -201,7 +225,7 @@ public class Player extends InputAdapter {
         if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.LEFT)) {
             animation = new Animation<TextureRegion>(1 / 10f, BIdlePlayer.getRegions());
         }
-        batch.draw(animation.getKeyFrame(elapsedTime, true), position_x, position_y);
+        batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x-16,pos.y-16);
 
     }
 

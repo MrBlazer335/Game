@@ -22,6 +22,7 @@ public class MyGdxGame extends ApplicationAdapter {
     OrthogonalTiledMapRenderer mapRender;
     MapObjects mapObjects;
     MapLayer mapLayer;
+    Box2DDebugRenderer debugRenderer;
 
     TiledMap map;
 
@@ -31,12 +32,14 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void create() {
+        Gdx.graphics.setContinuousRendering(true);
         batch = new SpriteBatch();
         level = new Level_maker("LEVEL_1.tmx");
         player = new Player(level.getWorld());
         map = new TmxMapLoader().load("LEVEL_1.tmx");
         mapObjects = map.getLayers().get("physics").getObjects();
         level.parseTiledObjectLayer(mapObjects);
+        debugRenderer = new Box2DDebugRenderer();
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -51,6 +54,7 @@ public class MyGdxGame extends ApplicationAdapter {
         mapRender.setView(camera);
         camera.update();
         mapRender.render();
+        //debugRenderer.render(level.getWorld(),camera.combined);
         batch.end();
         level.getWorld().step(1 / 30f, 6, 2);
 
@@ -60,6 +64,7 @@ public class MyGdxGame extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         player.dispose();
+
 
     }
 }
