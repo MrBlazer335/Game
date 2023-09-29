@@ -2,26 +2,27 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Level_maker.Level_maker;
 import com.mygdx.game.Level_maker.Player;
 
 public class MyGdxGame extends ApplicationAdapter {
     private int Health = 3;
+    Music music;
     SpriteBatch batch;
     OrthographicCamera camera;
     OrthogonalTiledMapRenderer mapRender;
     MapObjects mapObjects;
-    MapLayer mapLayer;
+    MapObjects Danger;
     Box2DDebugRenderer debugRenderer;
 
     TiledMap map;
@@ -30,21 +31,29 @@ public class MyGdxGame extends ApplicationAdapter {
     Player player;
 
 
+
     @Override
     public void create() {
         Gdx.graphics.setContinuousRendering(true);
+        music = Gdx.audio.newMusic(Gdx.files.internal("audio/The Empire Of Toads.mp3"));
+        music.play();
+        music.setVolume(0.005f);
+        music.setLooping(true);
         batch = new SpriteBatch();
         level = new Level_maker("LEVEL_1.tmx");
         player = new Player(level.getWorld());
         map = new TmxMapLoader().load("LEVEL_1.tmx");
         mapObjects = map.getLayers().get("physics").getObjects();
-        level.parseTiledObjectLayer(mapObjects);
+        Danger = map.getLayers().get("Damage").getObjects();
+        level.parseTiledObjectLayer(mapObjects,"Physics");
+        level.parseTiledObjectLayer(Danger,"Damage");
         debugRenderer = new Box2DDebugRenderer();
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     }
+
 
     @Override
     public void render() {
@@ -66,6 +75,7 @@ public class MyGdxGame extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         player.dispose();
+        music.dispose();
 
 
     }

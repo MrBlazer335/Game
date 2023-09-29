@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.listenerClass.listenerClass;
 
 public class Level_maker {
     OrthographicCamera camera;
@@ -23,10 +24,20 @@ public class Level_maker {
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        world.setContactListener(new listenerClass());
     }
 
-    public void parseTiledObjectLayer(MapObjects mapObjects) {
+    public void parseTiledObjectLayer(MapObjects mapObjects,String Layer) {
+        if (Layer == "Damage"){
+            for (MapObject mapObject : mapObjects) {
+
+                if (mapObject instanceof PolygonMapObject) {
+                    createStaticDamage((PolygonMapObject) mapObject, world);
+
+                }
+            }
+
+        }
         for (MapObject mapObject : mapObjects) {
 
             if (mapObject instanceof PolygonMapObject) {
@@ -45,8 +56,22 @@ public class Level_maker {
 
         Shape shape = createPolygonShape(polygonMapObject);
         body.createFixture(shape, 1000.0f);
+        body.setUserData("Bruh");
         shape.dispose();
     }
+
+    private void createStaticDamage(PolygonMapObject polygonMapObject, World world) {
+        Body body;
+        BodyDef bdef = new BodyDef();
+        bdef.type = BodyDef.BodyType.StaticBody;
+        body = world.createBody(bdef);
+
+        Shape shape = createPolygonShape(polygonMapObject);
+        body.createFixture(shape, 1000.0f);
+        body.setUserData("Spikes");
+        shape.dispose();
+    }
+
 
     private Shape createPolygonShape(PolygonMapObject polygonMapObject) {
         float[] vertices = polygonMapObject.getPolygon().getTransformedVertices();
