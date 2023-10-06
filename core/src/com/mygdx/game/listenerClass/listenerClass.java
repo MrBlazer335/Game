@@ -19,8 +19,8 @@ public class listenerClass implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-
-
+    Fixture fixtureA = contact.getFixtureA();
+    fixtureA.getBody().setUserData(0);
     }
 
     @Override
