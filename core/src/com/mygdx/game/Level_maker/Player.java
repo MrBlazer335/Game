@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 
 public class Player extends InputAdapter {
-    public int Health = 300;
+    public int Health = 10;
 
     int jumpCounter = 0;
     PolygonShape playerShape;
@@ -34,12 +34,11 @@ public class Player extends InputAdapter {
     private final TextureAtlas DyingPlayer;
 
 
-
     Animation<TextureRegion> animation;
 
 //Dying Part
 
-Animation<TextureRegion> PlayerIsDying;
+    Animation<TextureRegion> PlayerIsDying;
 
 
     enum Facing {LEFT, RIGHT}
@@ -80,7 +79,7 @@ Animation<TextureRegion> PlayerIsDying;
 
         DyingPlayer = new TextureAtlas("Textures/player/Animation/Dying.atlas");
 
-        PlayerIsDying = new Animation<TextureRegion>(1/60f,DyingPlayer.getRegions());
+        PlayerIsDying = new Animation<TextureRegion>(1 / 10f, DyingPlayer.getRegions());
 
         playerShape = new PolygonShape();
         float width = 25;
@@ -99,6 +98,7 @@ Animation<TextureRegion> PlayerIsDying;
     }
 
     public void render(SpriteBatch batch) {
+        System.out.println(CurrentState);
         GetUserData();
         ShowHP();
         TakingDamage();
@@ -137,55 +137,52 @@ Animation<TextureRegion> PlayerIsDying;
                 CurrentState = Player_state.DoubleJumping;
                 jumpCounter = 0;
             }
-
-
-            if (vel.y < -2.5f && !ontheGround) {
-                CurrentState = Player_state.Falling;
-            }
-            if (this.body.getLinearVelocity().
-
-                    len() == 0) {
-                CurrentState = Player_state.Staying;
-            }
-
-
-            elapsedTime += Gdx.graphics.getDeltaTime();
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
-            if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.RIGHT) && ontheGround) {
-                animation = new Animation<TextureRegion>(1 / 20f, RunningPlayer.getRegions());
-            }
-            if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.LEFT) && ontheGround) {
-                animation = new Animation<TextureRegion>(1 / 20f, BRunningPlayer.getRegions());
-            }
-            if (CurrentState.equals(Player_state.Jumping) && facing == Facing.RIGHT) {
-                animation = new Animation<TextureRegion>(1 / 20f, JumpingPlayer.getRegions());
-            }
-            if (CurrentState.equals(Player_state.Jumping) && facing == Facing.LEFT) {
-                animation = new Animation<TextureRegion>(1 / 20f, BJumpingPlayer.getRegions());
-            }
-
-            if (CurrentState.equals(Player_state.DoubleJumping)) {
-                animation = new Animation<TextureRegion>(1 / 20f, DoubleJump.getRegions());
-            }
-            if (CurrentState.equals(Player_state.Falling) && facing == Facing.RIGHT) {
-                animation = new Animation<TextureRegion>(1 / 20f, FallingPlayer.getRegions());
-            }
-            if (CurrentState.equals(Player_state.Falling) && facing == Facing.LEFT) {
-                animation = new Animation<TextureRegion>(1 / 20f, BFallingPlayer.getRegions());
-            }
-            if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.RIGHT)) {
-                animation = new Animation<TextureRegion>(1 / 20f, IdlePlayer.getRegions());
-            }
-            if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.LEFT)) {
-                animation = new Animation<TextureRegion>(1 / 20f, BIdlePlayer.getRegions());
-            }
-        batch.draw(animation.getKeyFrame(elapsedTime,true),pos.x-16f,pos.y-12.5f);
-
-        } else {
-            batch.draw(PlayerIsDying.getKeyFrame(elapsedTime,true),pos.x-16f,pos.y-12.5f);
         }
+
+        if (vel.y < -2.5f && !ontheGround) {
+            CurrentState = Player_state.Falling;
+        }
+        if (this.body.getLinearVelocity().len() == 0 && CurrentState != Player_state.Dying) {
+            CurrentState = Player_state.Staying;
+        }
+
+
+        elapsedTime += Gdx.graphics.getDeltaTime();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
+        if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.RIGHT) && ontheGround) {
+            animation = new Animation<TextureRegion>(1 / 20f, RunningPlayer.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.LEFT) && ontheGround) {
+            animation = new Animation<TextureRegion>(1 / 20f, BRunningPlayer.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Jumping) && facing == Facing.RIGHT) {
+            animation = new Animation<TextureRegion>(1 / 20f, JumpingPlayer.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Jumping) && facing == Facing.LEFT) {
+            animation = new Animation<TextureRegion>(1 / 20f, BJumpingPlayer.getRegions());
+        }
+
+        if (CurrentState.equals(Player_state.DoubleJumping)) {
+            animation = new Animation<TextureRegion>(1 / 20f, DoubleJump.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Falling) && facing == Facing.RIGHT) {
+            animation = new Animation<TextureRegion>(1 / 20f, FallingPlayer.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Falling) && facing == Facing.LEFT) {
+            animation = new Animation<TextureRegion>(1 / 20f, BFallingPlayer.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.RIGHT)) {
+            animation = new Animation<TextureRegion>(1 / 20f, IdlePlayer.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Staying) && facing.equals(Facing.LEFT)) {
+            animation = new Animation<TextureRegion>(1 / 20f, BIdlePlayer.getRegions());
+        }
+        if (CurrentState.equals(Player_state.Dying)) {
+            animation = new Animation<TextureRegion>(1 / 5f, DyingPlayer.getRegions());
+        }
+        batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x - 16f, pos.y - 12.5f);
     }
 
 
