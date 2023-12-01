@@ -14,68 +14,40 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Level_maker.Level_maker;
 import com.mygdx.game.Level_maker.Player;
+import com.mygdx.game.Menu.MainMenu;
+
 
 public class MyGdxGame extends ApplicationAdapter {
-    private int Health = 3;
-    Music music;
     SpriteBatch batch;
-    OrthographicCamera camera;
-    OrthogonalTiledMapRenderer mapRender;
-    MapObjects mapObjects;
-    MapObjects Danger;
-    Box2DDebugRenderer debugRenderer;
 
-    TiledMap map;
-
-    Level_maker level;
-    Player player;
+    MainMenu mainMenu;
 
 
 
     @Override
     public void create() {
-        Gdx.graphics.setContinuousRendering(true);
-        music = Gdx.audio.newMusic(Gdx.files.internal("audio/The Empire Of Toads.mp3"));
-        music.play();
-        music.setVolume(0.005f);
-        music.setLooping(true);
         batch = new SpriteBatch();
-        level = new Level_maker("LEVEL_1.tmx");
-        player = new Player(level.getWorld());
-        map = new TmxMapLoader().load("LEVEL_1.tmx");
-        mapObjects = map.getLayers().get("physics").getObjects();
-        Danger = map.getLayers().get("Damage").getObjects();
-        level.parseTiledObjectLayer(mapObjects,"Physics");
-        level.parseTiledObjectLayer(Danger,"Damage");
-        debugRenderer = new Box2DDebugRenderer();
-        mapRender = new OrthogonalTiledMapRenderer(map);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        mainMenu = new MainMenu();
+        mainMenu.create();
 
     }
 
 
     @Override
     public void render() {
-        ScreenUtils.clear(1, 1, 1, 1);
         batch.begin();
-        player.render(batch);
-        mapRender.setView(camera);
-        camera.position.set(player.CameraCordsX(),player.CameraCordsY(),0);
-        camera.update();
-        camera.zoom = 0.25f;
-        mapRender.render();
-        //debugRenderer.render(level.getWorld(),camera.combined);
+        mainMenu.render();
+
         batch.end();
-        level.getWorld().step(1 / 15f, 6, 2);
+
 
     }
 
     @Override
     public void dispose() {
+        mainMenu.dispose();
         batch.dispose();
-        player.dispose();
-        music.dispose();
+        mainMenu.dispose();
 
 
     }
