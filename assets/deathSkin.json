@@ -1,0 +1,35 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	Text_Black_8x10_export: {
+		file: Text (Black) (8x10) export.fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	RGBA_255_0_0_255: {
+		r: 1
+		g: 0
+		b: 0
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: Restart
+		down: imgonline-com-ua-Negative-FHKwn8QIaSes
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: Text_Black_8x10_export
+		fontColor: RGBA_255_0_0_255
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+}
