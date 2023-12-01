@@ -10,11 +10,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
 public class Player extends InputAdapter {
+    DeathScene deathScene;
     public int Health = 10;
-
     int jumpCounter = 0;
     PolygonShape playerShape;
     FixtureDef fixtureDef;
@@ -44,7 +45,7 @@ public class Player extends InputAdapter {
     enum Facing {LEFT, RIGHT}
 
     Facing facing = Facing.LEFT;
-
+    boolean death = false;
     enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping, Dying}
 
     Player_state CurrentState = Player_state.Staying;
@@ -55,7 +56,7 @@ public class Player extends InputAdapter {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(position_x, position_y);
-
+        deathScene = new DeathScene();
 
         body = world.createBody(bodyDef);
 
@@ -97,23 +98,25 @@ public class Player extends InputAdapter {
 
     }
 
+
     public void render(SpriteBatch batch) {
-        System.out.println(CurrentState);
-        GetUserData();
-        ShowHP();
+
         TakingDamage();
         Death();
+        if (death == true){
+
+        }
 
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();
 
 
-        boolean ontheGround = true;
+        boolean onTheGround = true;
         if (vel.y > -0.1f && vel.y < 0.1f) {
             jumpCounter = 0;
 
         } else {
-            ontheGround = false;
+            onTheGround = false;
         }
         if (CurrentState != Player_state.Dying) {
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -128,7 +131,7 @@ public class Player extends InputAdapter {
                 this.body.applyLinearImpulse(PlayersSpeed, vel.y, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.W) && ontheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && ontheGround) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround) {
                 this.body.applyLinearImpulse(vel.x, 1700f, pos.x, pos.y, true);
                 CurrentState = Player_state.Jumping;
                 jumpCounter++;
@@ -139,7 +142,7 @@ public class Player extends InputAdapter {
             }
         }
 
-        if (vel.y < -2.5f && !ontheGround) {
+        if (vel.y < -2.5f && !onTheGround) {
             CurrentState = Player_state.Falling;
         }
         if (this.body.getLinearVelocity().len() == 0 && CurrentState != Player_state.Dying) {
@@ -151,10 +154,10 @@ public class Player extends InputAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-        if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.RIGHT) && ontheGround) {
+        if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.RIGHT) && onTheGround) {
             animation = new Animation<TextureRegion>(1 / 20f, RunningPlayer.getRegions());
         }
-        if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.LEFT) && ontheGround) {
+        if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.LEFT) && onTheGround) {
             animation = new Animation<TextureRegion>(1 / 20f, BRunningPlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Jumping) && facing == Facing.RIGHT) {
@@ -180,22 +183,21 @@ public class Player extends InputAdapter {
             animation = new Animation<TextureRegion>(1 / 20f, BIdlePlayer.getRegions());
         }
         if (CurrentState.equals(Player_state.Dying)) {
-            animation = new Animation<TextureRegion>(1 / 5f, DyingPlayer.getRegions());
+            animation = new Animation<TextureRegion>(1 / 15f, DyingPlayer.getRegions());
         }
         batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x - 16f, pos.y - 12.5f);
     }
 
 
-    public void Death() {
+    public boolean Death() {
         if (Health < 0) {
             CurrentState = Player_state.Dying;
-
+            death = true;
         }
+        return death;
     }
 
-    public void ShowHP() {
-        System.out.println(Health);
-    }
+
 
     public void TakingDamage() {
         if (this.body.getUserData() == (Integer) (1)) {
@@ -203,9 +205,7 @@ public class Player extends InputAdapter {
         }
     }
 
-    public void GetUserData() {
-        System.out.println(this.body.getUserData());
-    }
+
 
     public float CameraCordsX() {
         Vector2 vector2;
@@ -219,14 +219,4 @@ public class Player extends InputAdapter {
         return vector2.y;
     }
 
-    public void dispose() {
-        playerShape.dispose();
-        RunningPlayer.dispose();
-        FallingPlayer.dispose();
-        JumpingPlayer.dispose();
-        IdlePlayer.dispose();
-        DoubleJump.dispose();
-        DyingPlayer.dispose();
-
-    }
 }

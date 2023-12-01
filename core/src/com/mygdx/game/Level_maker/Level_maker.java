@@ -28,7 +28,7 @@ public class Level_maker {
     }
 
     public void parseTiledObjectLayer(MapObjects mapObjects,String Layer) {
-        if (Layer == "Damage"){
+        if (Layer.equals("Damage")){
             for (MapObject mapObject : mapObjects) {
 
                 if (mapObject instanceof PolygonMapObject) {
@@ -56,7 +56,7 @@ public class Level_maker {
 
         Shape shape = createPolygonShape(polygonMapObject);
         body.createFixture(shape, 1000.0f);
-        body.setUserData("Bruh");
+        body.setUserData("Damage");
         shape.dispose();
     }
 

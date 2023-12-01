@@ -11,9 +11,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.Menu.MainMenu;
 
 public class Level_Wrapper extends ApplicationAdapter {
+
     Music music;
     SpriteBatch batch;
     OrthographicCamera camera;
@@ -26,7 +26,7 @@ public class Level_Wrapper extends ApplicationAdapter {
     Player player;
 
     @Override
-    public void create(){
+    public void create() {
         Gdx.graphics.setContinuousRendering(true);
         music = Gdx.audio.newMusic(Gdx.files.internal("audio/The Empire Of Toads.mp3"));
         music.play();
@@ -45,6 +45,7 @@ public class Level_Wrapper extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
+
     @Override
     public void render() {
         ScreenUtils.clear(1, 1, 1, 1);
@@ -55,7 +56,8 @@ public class Level_Wrapper extends ApplicationAdapter {
         camera.update();
         camera.zoom = 0.25f;
         mapRender.render();
-        debugRenderer.render(level.getWorld(),camera.combined);
+       // debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
+        batch.end();
     }
 }
