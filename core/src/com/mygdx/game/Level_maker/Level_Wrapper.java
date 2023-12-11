@@ -59,17 +59,18 @@ public class Level_Wrapper implements Screen {
 
     @Override
     public void render(float delta) {
-        music.play();
         ScreenUtils.clear(1, 1, 1, 1);
+        music.play();
+
         batch.begin();
+        apple.render(batch);
         player.render(batch);
-        apple.render(batch, player.CameraCordsX(), player.CameraCordsY());
+
         mapRender.setView(camera);
         camera.position.set(player.CameraCordsX(), player.CameraCordsY(), 0);
-
-        camera.update();
         camera.zoom = 0.25f;
         mapRender.render();
+
         //debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();

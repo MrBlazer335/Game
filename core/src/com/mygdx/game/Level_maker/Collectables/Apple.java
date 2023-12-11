@@ -9,13 +9,14 @@ public class Apple {
     float elapsedTime;
     Animation<TextureRegion> animation;
 
+    float position_x = 1013;
+    float position_y = 138;
     public Apple(World world) {
         TextureAtlas textureRegion = new TextureAtlas(Gdx.files.internal("Textures/Collectables/Apple.atlas"));
         animation = new Animation<TextureRegion>(1 / 20f, textureRegion.getRegions());
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        int positon_x = 1013;
-        int position_y = 138;
+
         bodyDef.position.set(1013, 138);
 
         body = world.createBody(bodyDef);
@@ -30,14 +31,13 @@ public class Apple {
         body.createFixture(fixtureDef);
 
 
-        elapsedTime += Gdx.graphics.getDeltaTime();
+
 
 
     }
 
-    public void render(SpriteBatch batch, float cameraX, float cameraY) {
-        float adjustedX = body.getPosition().x - cameraX;
-        float adjustedY = body.getPosition().y - cameraY;
-        batch.draw(animation.getKeyFrame(elapsedTime, true), adjustedX, adjustedY);
+    public void render(SpriteBatch batch) {
+        elapsedTime += Gdx.graphics.getDeltaTime();
+        batch.draw(animation.getKeyFrame(elapsedTime, true),position_x-14.5f,position_y - 15f);
     }
 }

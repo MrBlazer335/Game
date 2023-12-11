@@ -22,8 +22,8 @@ public class Level_maker {
         world = new World(new Vector2(0, -9.8f), true);
         map = new TmxMapLoader().load(level);
         mapRender = new OrthogonalTiledMapRenderer(map);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //camera = new OrthographicCamera();
+        //camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         world.setContactListener(new listenerClass());
     }
 

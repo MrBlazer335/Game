@@ -10,9 +10,6 @@ import com.mygdx.game.Menu.MainMenu;
 public class MyGdxGame extends Game {
     SpriteBatch batch;
 
-    MainMenu mainMenu;
-    DeathScene deathScene;
-
 
     @Override
     public void create() {

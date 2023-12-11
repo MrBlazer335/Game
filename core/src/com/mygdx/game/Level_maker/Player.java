@@ -10,19 +10,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
 public class Player extends InputAdapter {
 
-    private int Health = 10;
-    int jumpCounter = 0;
+    private int Health = 3;
+    private int jumpCounter = 0;
     PolygonShape playerShape;
     FixtureDef fixtureDef;
     private final Body body;
-    public float position_x = 200;
-    public float position_y = 280;
-    public float PlayersSpeed = 50.0f;
     private final TextureAtlas RunningPlayer;
     private final TextureAtlas IdlePlayer;
     private final TextureAtlas BIdlePlayer;
@@ -45,7 +41,6 @@ public class Player extends InputAdapter {
     enum Facing {LEFT, RIGHT}
 
     Facing facing = Facing.LEFT;
-    boolean death = false;
 
     enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping, Dying}
 
@@ -56,6 +51,8 @@ public class Player extends InputAdapter {
     public Player(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        float position_y = 280;
+        float position_x = 200;
         bodyDef.position.set(position_x, position_y);
 
 
@@ -84,7 +81,7 @@ public class Player extends InputAdapter {
         PlayerIsDying = new Animation<TextureRegion>(1 / 10f, DyingPlayer.getRegions());
 
         playerShape = new PolygonShape();
-        float width = 25;
+        float width = 12;
         float height = 22;
         playerShape.setAsBox(width / 2, height / 2);
 
@@ -122,16 +119,17 @@ public class Player extends InputAdapter {
             onTheGround = false;
         }
         if (CurrentState != Player_state.Dying) {
+            float playersSpeed = 50.0f;
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 facing = Facing.LEFT;
-                this.body.applyLinearImpulse(-PlayersSpeed, vel.y, pos.x, pos.y, true);
+                this.body.applyLinearImpulse(-playersSpeed, vel.y, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
 
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 facing = Facing.RIGHT;
-                this.body.applyLinearImpulse(PlayersSpeed, vel.y, pos.x, pos.y, true);
+                this.body.applyLinearImpulse(playersSpeed, vel.y, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround) {
