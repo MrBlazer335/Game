@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
 public class Player extends InputAdapter {
-    DeathScene deathScene;
+
     private int Health = 10;
     int jumpCounter = 0;
     PolygonShape playerShape;
@@ -46,6 +46,7 @@ public class Player extends InputAdapter {
 
     Facing facing = Facing.LEFT;
     boolean death = false;
+
     enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping, Dying}
 
     Player_state CurrentState = Player_state.Staying;
@@ -91,13 +92,15 @@ public class Player extends InputAdapter {
         fixtureDef.shape = playerShape;
         fixtureDef.density = 0.1f;
         fixtureDef.friction = 0.1f;
+        // fixtureDef.restitution = -0.1f;
         body.createFixture(fixtureDef);
         body.setFixedRotation(true);
         body.setUserData(0);
 
 
     }
-    public int getHealth(){
+
+    public int getHealth() {
         return this.Health;
     }
 
@@ -189,22 +192,11 @@ public class Player extends InputAdapter {
     }
 
 
-    public boolean Death() {
-        if (Health < 0) {
-            CurrentState = Player_state.Dying;
-            death = true;
-        }
-        return death;
-    }
-
-
-
     public void TakingDamage() {
         if (this.body.getUserData() == (Integer) (1)) {
             Health--;
         }
     }
-
 
 
     public float CameraCordsX() {
