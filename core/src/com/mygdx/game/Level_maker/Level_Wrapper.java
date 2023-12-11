@@ -2,6 +2,7 @@ package com.mygdx.game.Level_maker;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,9 +12,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.MyGdxGame;
 
-public class Level_Wrapper extends ApplicationAdapter {
-
+public class Level_Wrapper implements Screen {
+    final MyGdxGame game;
     Music music;
     SpriteBatch batch;
     OrthographicCamera camera;
@@ -24,9 +26,8 @@ public class Level_Wrapper extends ApplicationAdapter {
     TiledMap map;
     Level_maker level;
     Player player;
-
-    @Override
-    public void create() {
+    public Level_Wrapper(final MyGdxGame game){
+        this.game = game;
         Gdx.graphics.setContinuousRendering(true);
         music = Gdx.audio.newMusic(Gdx.files.internal("audio/The Empire Of Toads.mp3"));
 
@@ -46,8 +47,15 @@ public class Level_Wrapper extends ApplicationAdapter {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
+
+
     @Override
-    public void render() {
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
         music.play();
         ScreenUtils.clear(1, 1, 1, 1);
         batch.begin();
@@ -57,8 +65,38 @@ public class Level_Wrapper extends ApplicationAdapter {
         camera.update();
         camera.zoom = 0.25f;
         mapRender.render();
-       // debugRenderer.render(level.getWorld(), camera.combined);
+        System.out.println(player.getHealth());
+        // debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();
+        if (player.getHealth() == 0){
+            music.stop();
+            game.setScreen(new DeathScene(game));
+        }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

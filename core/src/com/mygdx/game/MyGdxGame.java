@@ -17,24 +17,21 @@ public class MyGdxGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        mainMenu = new MainMenu();
-        mainMenu.create();
+        this.setScreen(new MainMenu(this));
 
     }
 
 
     @Override
     public void render() {
-        batch.begin();
-        mainMenu.render();
-        batch.end();
+      super.render();
 
 
     }
 
     @Override
     public void dispose() {
-        mainMenu.dispose();
+
         batch.dispose();
 
     }

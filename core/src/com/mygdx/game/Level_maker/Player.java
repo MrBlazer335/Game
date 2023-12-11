@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Player extends InputAdapter {
     DeathScene deathScene;
-    public int Health = 10;
+    private int Health = 10;
     int jumpCounter = 0;
     PolygonShape playerShape;
     FixtureDef fixtureDef;
@@ -56,7 +56,7 @@ public class Player extends InputAdapter {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(position_x, position_y);
-        deathScene = new DeathScene();
+
 
         body = world.createBody(bodyDef);
 
@@ -97,15 +97,15 @@ public class Player extends InputAdapter {
 
 
     }
-
+    public int getHealth(){
+        return this.Health;
+    }
 
     public void render(SpriteBatch batch) {
 
         TakingDamage();
-        Death();
-        if (death == true){
 
-        }
+
 
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();
