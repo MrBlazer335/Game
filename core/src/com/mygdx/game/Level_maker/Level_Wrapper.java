@@ -29,7 +29,7 @@ public class Level_Wrapper extends ApplicationAdapter {
     public void create() {
         Gdx.graphics.setContinuousRendering(true);
         music = Gdx.audio.newMusic(Gdx.files.internal("audio/The Empire Of Toads.mp3"));
-        music.play();
+
         music.setVolume(0.005f);
         music.setLooping(true);
         batch = new SpriteBatch();
@@ -48,6 +48,7 @@ public class Level_Wrapper extends ApplicationAdapter {
 
     @Override
     public void render() {
+        music.play();
         ScreenUtils.clear(1, 1, 1, 1);
         batch.begin();
         player.render(batch);
