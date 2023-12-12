@@ -43,6 +43,7 @@ public class Apple {
         fixtureDef.shape = circle;
         fixtureDef.density = 0.5f;
         fixtureDef.friction = 0.4f;
+        fixtureDef.isSensor = true;
         body.createFixture(fixtureDef);
 
 

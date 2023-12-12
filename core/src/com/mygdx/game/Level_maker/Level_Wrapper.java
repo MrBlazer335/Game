@@ -73,7 +73,7 @@ public class Level_Wrapper implements Screen {
 
         camera.update();
         items.render();
-        debugRenderer.render(level.getWorld(), camera.combined);
+        //debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();
         if (player.getHealth() == 0) {
