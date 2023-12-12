@@ -13,6 +13,12 @@ public class listenerClass implements ContactListener {
         if (fixtureB.getBody().getUserData() == "Spikes") {
             fixtureA.getBody().setUserData(1);
         }
+        if (fixtureB.getBody().getUserData() == "Apples"){
+            fixtureA.getBody().setUserData("Apple");
+            Body appleBody = fixtureB.getBody();
+            appleBody.setUserData(null);
+            appleBody.getWorld().destroyBody(appleBody);
+        }
 
     }
 

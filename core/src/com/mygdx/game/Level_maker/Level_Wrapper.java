@@ -28,7 +28,8 @@ public class Level_Wrapper implements Screen {
     Level_maker level;
     Player player;
     Apple apple;
-    public Level_Wrapper(final MyGdxGame game){
+
+    public Level_Wrapper(final MyGdxGame game) {
         this.game = game;
         Gdx.graphics.setContinuousRendering(true);
         music = Gdx.audio.newMusic(Gdx.files.internal("audio/The Empire Of Toads.mp3"));
@@ -46,10 +47,10 @@ public class Level_Wrapper implements Screen {
         level.parseTiledObjectLayer(Danger, "Damage");
         debugRenderer = new Box2DDebugRenderer();
         mapRender = new OrthogonalTiledMapRenderer(map);
-        camera = new OrthographicCamera();
+        camera = level.getCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
     }
-
 
 
     @Override
@@ -59,22 +60,21 @@ public class Level_Wrapper implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(1, 1, 1, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
         music.play();
 
         batch.begin();
-        apple.render(batch);
         player.render(batch);
-
         mapRender.setView(camera);
         camera.position.set(player.CameraCordsX(), player.CameraCordsY(), 0);
         camera.zoom = 0.25f;
         mapRender.render();
-
+        apple.render(batch);
+        camera.update();
         //debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();
-        if (player.getHealth() == 0){
+        if (player.getHealth() == 0) {
             music.stop();
             game.setScreen(new DeathScene(game));
         }
