@@ -3,6 +3,7 @@ package com.mygdx.game.Level_maker;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +14,8 @@ import com.badlogic.gdx.physics.box2d.*;
 
 
 public class Player extends InputAdapter {
-
+    private final Sound collectSound;
+    private final Sound getJump;
     private int Health = 3;
     private int jumpCounter = 0;
     PolygonShape playerShape;
@@ -51,11 +53,13 @@ public class Player extends InputAdapter {
     public Player(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        float position_y = 280;
+        float position_y = 80;
         float position_x = 200;
         bodyDef.position.set(position_x, position_y);
-
-
+        //Sounds
+        collectSound = Gdx.audio.newSound(Gdx.files.internal("audio/Fruit_collect.wav"));
+        getJump = Gdx.audio.newSound(Gdx.files.internal("audio/Jump 1.wav"));
+        //
         body = world.createBody(bodyDef);
 
         RunningPlayer = new TextureAtlas("Textures/player/Animation/RunningFrog.atlas");
@@ -104,7 +108,7 @@ public class Player extends InputAdapter {
     public void render(SpriteBatch batch) {
 
         TakingDamage();
-
+        isCollecting();
 
 
         Vector2 vel = this.body.getLinearVelocity();
@@ -122,24 +126,26 @@ public class Player extends InputAdapter {
             float playersSpeed = 50.0f;
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 facing = Facing.LEFT;
-                this.body.applyLinearImpulse(-playersSpeed, vel.y, pos.x, pos.y, true);
+                this.body.applyLinearImpulse(-playersSpeed, vel.y/2, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
 
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 facing = Facing.RIGHT;
-                this.body.applyLinearImpulse(playersSpeed, vel.y, pos.x, pos.y, true);
+                this.body.applyLinearImpulse(playersSpeed, vel.y/2, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround) {
                 this.body.applyLinearImpulse(vel.x, 1700f, pos.x, pos.y, true);
                 CurrentState = Player_state.Jumping;
                 jumpCounter++;
+                getJump.play(0.1f);
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1) {
                 this.body.applyLinearImpulse(vel.x, 1500f, pos.x, pos.y, true);
                 CurrentState = Player_state.DoubleJumping;
                 jumpCounter = 0;
+                getJump.play(0.1f);
             }
         }
 
@@ -163,13 +169,16 @@ public class Player extends InputAdapter {
         }
         if (CurrentState.equals(Player_state.Jumping) && facing == Facing.RIGHT) {
             animation = new Animation<TextureRegion>(1 / 20f, JumpingPlayer.getRegions());
+
         }
         if (CurrentState.equals(Player_state.Jumping) && facing == Facing.LEFT) {
             animation = new Animation<TextureRegion>(1 / 20f, BJumpingPlayer.getRegions());
+
         }
 
         if (CurrentState.equals(Player_state.DoubleJumping)) {
             animation = new Animation<TextureRegion>(1 / 20f, DoubleJump.getRegions());
+
         }
         if (CurrentState.equals(Player_state.Falling) && facing == Facing.RIGHT) {
             animation = new Animation<TextureRegion>(1 / 20f, FallingPlayer.getRegions());
@@ -207,6 +216,11 @@ public class Player extends InputAdapter {
         Vector2 vector2;
         vector2 = this.body.getPosition();
         return vector2.y;
+    }
+    public void isCollecting(){
+        if (this.body.getUserData().equals("Apple")){
+            collectSound.play(0.3f);
+        }
     }
 
 }

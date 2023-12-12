@@ -20,8 +20,6 @@ public class listenerClass implements ContactListener {
             fixtureB.getBody().setUserData("DESTROY");
 
         }
-        System.out.println("beginContact - userDataA: " + fixtureA.getUserData());
-        System.out.println("beginContact - userDataB: " + fixtureB.getUserData());
 
     }
 
