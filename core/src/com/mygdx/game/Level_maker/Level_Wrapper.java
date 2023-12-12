@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Level_maker.Collectables.Apple;
 import com.mygdx.game.Level_maker.Collectables.Items;
+import com.mygdx.game.Level_maker.EndGoal.Finish;
 import com.mygdx.game.MyGdxGame;
 
 public class Level_Wrapper implements Screen {
@@ -29,6 +30,7 @@ public class Level_Wrapper implements Screen {
     Level_maker level;
     Player player;
     Items items;
+    Finish finish;
 
     public Level_Wrapper(final MyGdxGame game) {
         this.game = game;
@@ -37,8 +39,12 @@ public class Level_Wrapper implements Screen {
 
         music.setVolume(0.005f);
         music.setLooping(true);
+
+
         batch = new SpriteBatch();
         level = new Level_maker("LEVEL_1.tmx");
+        finish = new Finish(level.getWorld());
+
         items = new Items(10,level,batch);
         player = new Player(level.getWorld());
         map = new TmxMapLoader().load("LEVEL_1.tmx");
@@ -70,10 +76,10 @@ public class Level_Wrapper implements Screen {
         camera.position.set(player.CameraCordsX(), player.CameraCordsY(), 0);
         camera.zoom = 0.25f;
         mapRender.render();
-
+        finish.render(batch);
         camera.update();
         items.render();
-        //debugRenderer.render(level.getWorld(), camera.combined);
+        debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();
         if (player.getHealth() == 0) {

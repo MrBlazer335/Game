@@ -20,6 +20,10 @@ public class listenerClass implements ContactListener {
             fixtureB.getBody().setUserData("DESTROY");
 
         }
+        if (fixtureB.getBody().getUserData().equals("Finish")){
+            System.out.println("Wow");
+            Gdx.app.log("Game","Finish!");
+        }
 
     }
 
