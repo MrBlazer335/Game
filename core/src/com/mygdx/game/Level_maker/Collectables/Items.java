@@ -14,14 +14,15 @@ public class Items {
     SpriteBatch batch;
     ArrayList<Apple> apples = new ArrayList<>();
     Level_maker level;
+    Apple object;
 
 
-    public Items(Apple objects, int amount, Level_maker level, SpriteBatch batch) {
+    public Items(int amount, Level_maker level, SpriteBatch batch) {
         this.level = level;
         this.batch = batch;
         for (int i = 1; i <= amount; i++) {
-            objects = new Apple(level.getWorld());
-            apples.add(objects);
+            object = new Apple(level.getWorld());
+            apples.add(object);
         }
     }
 

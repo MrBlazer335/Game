@@ -15,6 +15,7 @@ public class listenerClass implements ContactListener {
         }
         if (fixtureB.getBody().getUserData() == "Apples"){
             Gdx.app.log("Contact","Yes");
+            System.out.println(fixtureB.getBody().getUserData());
             fixtureA.getBody().setUserData("Apple");
             fixtureB.getBody().setUserData("DESTROY");
 

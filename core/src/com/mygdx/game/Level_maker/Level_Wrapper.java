@@ -39,7 +39,7 @@ public class Level_Wrapper implements Screen {
         music.setLooping(true);
         batch = new SpriteBatch();
         level = new Level_maker("LEVEL_1.tmx");
-        items = new Items(new Apple(level.getWorld()), 0, level,batch);
+        items = new Items(10,level,batch);
         player = new Player(level.getWorld());
         map = new TmxMapLoader().load("LEVEL_1.tmx");
         mapObjects = map.getLayers().get("physics").getObjects();
