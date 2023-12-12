@@ -14,11 +14,13 @@ public class listenerClass implements ContactListener {
             fixtureA.getBody().setUserData(1);
         }
         if (fixtureB.getBody().getUserData() == "Apples"){
+            Gdx.app.log("Contact","Yes");
             fixtureA.getBody().setUserData("Apple");
-            Body appleBody = fixtureB.getBody();
-            appleBody.setUserData(null);
-            appleBody.getWorld().destroyBody(appleBody);
+            fixtureB.getBody().setUserData("DESTROY");
+
         }
+        System.out.println("beginContact - userDataA: " + fixtureA.getUserData());
+        System.out.println("beginContact - userDataB: " + fixtureB.getUserData());
 
     }
 

@@ -8,7 +8,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(230);
+		config.setForegroundFPS(120);
 		config.setTitle("Frog 0.15555");
 		config.setWindowedMode(1200,700);
 		new Lwjgl3Application(new MyGdxGame(), config);
