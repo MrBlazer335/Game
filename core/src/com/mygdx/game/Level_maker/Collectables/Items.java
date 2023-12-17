@@ -43,7 +43,7 @@ public class Items {
                 a.render(batch);
             }
             toDestroy();
-            Gdx.app.log("Amount", "Amount = " + apples.size());
+            //Gdx.app.log("Amount", "Amount = " + apples.size());
         }
     }
 }

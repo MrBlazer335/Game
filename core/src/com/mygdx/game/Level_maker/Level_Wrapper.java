@@ -85,6 +85,7 @@ public class Level_Wrapper implements Screen {
         if (player.getHealth() == 0) {
             music.stop();
             game.setScreen(new DeathScene(game));
+            dispose();
         }
     }
 

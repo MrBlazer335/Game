@@ -16,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.*;
 public class Player extends InputAdapter {
     private final Sound collectSound;
     private final Sound getJump;
-    private int Health = 3;
+    private int Health = 2;
     private int jumpCounter = 0;
     PolygonShape playerShape;
     FixtureDef fixtureDef;
@@ -85,7 +85,7 @@ public class Player extends InputAdapter {
         PlayerIsDying = new Animation<TextureRegion>(1 / 10f, DyingPlayer.getRegions());
 
         playerShape = new PolygonShape();
-        float width = 12;
+        float width = 20;
         float height = 22;
         playerShape.setAsBox(width / 2, height / 2);
 
@@ -109,7 +109,7 @@ public class Player extends InputAdapter {
 
         TakingDamage();
         isCollecting();
-
+        Gdx.app.log("Velocity", "X-> " + this.body.getLinearVelocity().x + " " + "Y-> " + this.body.getLinearVelocity().y);
 
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();
@@ -126,23 +126,23 @@ public class Player extends InputAdapter {
             float playersSpeed = 50.0f;
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 facing = Facing.LEFT;
-                this.body.applyLinearImpulse(-playersSpeed, vel.y/2, pos.x, pos.y, true);
+                this.body.applyLinearImpulse(-playersSpeed, 0, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
 
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 facing = Facing.RIGHT;
-                this.body.applyLinearImpulse(playersSpeed, vel.y/2, pos.x, pos.y, true);
+                this.body.applyLinearImpulse(playersSpeed, 0, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround) {
-                this.body.applyLinearImpulse(vel.x, 1700f, pos.x, pos.y, true);
+                this.body.setLinearVelocity(0,2500f);
                 CurrentState = Player_state.Jumping;
                 jumpCounter++;
                 getJump.play(0.1f);
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1) {
-                this.body.applyLinearImpulse(vel.x, 1500f, pos.x, pos.y, true);
+                this.body.applyLinearImpulse(0, 2000f, pos.x, pos.y, true);
                 CurrentState = Player_state.DoubleJumping;
                 jumpCounter = 0;
                 getJump.play(0.1f);
@@ -217,8 +217,9 @@ public class Player extends InputAdapter {
         vector2 = this.body.getPosition();
         return vector2.y;
     }
-    public void isCollecting(){
-        if (this.body.getUserData().equals("Apple")){
+
+    public void isCollecting() {
+        if (this.body.getUserData().equals("Apple")) {
             collectSound.play(0.3f);
         }
     }

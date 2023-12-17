@@ -56,7 +56,7 @@ public class Apple {
     public void render(SpriteBatch batch) {
         elapsedTime += Gdx.graphics.getDeltaTime();
         batch.draw(animation.getKeyFrame(elapsedTime, true), body.getPosition().x - 15, body.getPosition().y - 15);
-        status();
+        //status();
     }
 
 }
