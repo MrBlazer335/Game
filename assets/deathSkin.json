@@ -18,13 +18,29 @@ com.badlogic.gdx.graphics.Color: {
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
 		up: Restart
-		down: imgonline-com-ua-Negative-FHKwn8QIaSes
+		down: Restart_down
+	}
+	reset: {
+		up: Restart
+		down: Restart_down
+	}
+	close: {
+		up: Close
+		down: imageedit_1_5510822168
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+	default: {
+		imageUp: Close
+		imageDown: imageedit_1_5510822168
+	}
+	bruh: {
+		parent: reset
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
 		font: Text_Black_8x10_export
-		fontColor: RGBA_255_0_0_255
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {

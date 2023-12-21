@@ -8,14 +8,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Menu.MainMenu;
 import com.mygdx.game.MyGdxGame;
 import com.ray3k.stripe.scenecomposer.SceneComposerStageBuilder;
+
+import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
 
 public class DeathScene implements Screen {
     final MyGdxGame game;
@@ -24,34 +28,60 @@ public class DeathScene implements Screen {
     private Stage stage;
 
 
-   public DeathScene(final MyGdxGame game){
+   public DeathScene(final MyGdxGame game) {
        this.game = game;
-        stage = new Stage(new ScreenViewport());
-        skin = new Skin(Gdx.files.internal("deathSkin.json"));
-        SceneComposerStageBuilder builder = new SceneComposerStageBuilder();
-        builder.build(stage,skin,Gdx.files.internal("death.json"));
-        Gdx.input.setInputProcessor(stage);
+       stage = new Stage(new StretchViewport(600,700));
+       skin = new Skin(Gdx.files.internal("deathSkin.json"));
+       Gdx.input.setInputProcessor(stage);
 
-        Table table = new Table();
-        table.setFillParent(true);
+       Table table = new Table();
+       table.setFillParent(true);
 
-        Label label = new Label("you diedOOO", skin);
-        table.add(label).expand();
+       Stack stack = new Stack();
 
-        table.row();
-        Button button = new Button(skin);
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new Level_Wrapper(game));
-                dispose();
+       Image image = new Image(skin, "R");
+       image.setScaling(Scaling.fill);
+       stack.addActor(image);
 
-            }
-        });
-        table.add(button);
-        stage.addActor(table);
-        stage.addAction(Actions.fadeIn(1));
-    }
+       Label label = new Label("you died", skin);
+       label.setAlignment(Align.top);
+       stack.addActor(label);
+
+       Table table1 = new Table();
+       table1.align(Align.bottom);
+
+       Button button = new Button(skin);
+       button.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               game.setScreen(new Level_Wrapper(game));
+               dispose();
+
+           }
+       });
+       button.setName("Restart");
+       table1.add(button).spaceRight(40.0f).height(40.0f).minWidth(40.0f).maxWidth(40.0f).prefWidth(45.0f);
+
+       button = new Button(skin, "close");
+       button.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               game.setScreen(new MainMenu(game));
+               dispose();
+
+           }
+       });
+       button.setName("Close");
+       table1.add(button).size(45.0f);
+       stack.addActor(table1);
+       table.add(stack);
+       stage.addActor(table);
+
+
+
+//
+//
+   }
     public void show() {
         stage.getRoot().setVisible(true);
     }

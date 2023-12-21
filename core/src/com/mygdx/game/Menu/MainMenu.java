@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Level_maker.Level_Wrapper;
 import com.mygdx.game.MyGdxGame;
 
@@ -25,7 +26,7 @@ public class MainMenu implements Screen {
     public MainMenu(final MyGdxGame game) {
         this.game = game;
         levelWrapper = new Level_Wrapper(game);
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new StretchViewport(600,600));
         skin = new Skin(Gdx.files.internal("skin.json"));
         Gdx.input.setInputProcessor(stage);
 

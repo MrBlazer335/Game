@@ -1,23 +1,9 @@
 
 deathSkin.png
-size: 256, 256
+size: 1024, 1024
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
-Green
-  rotate: false
-  xy: 1, 169
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-Restart
-  rotate: false
-  xy: 67, 211
-  size: 21, 22
-  orig: 21, 22
-  offset: 0, 0
-  index: -1
 Text (Black) (8x10) export
   rotate: false
   xy: 1, 25
@@ -25,10 +11,38 @@ Text (Black) (8x10) export
   orig: 30, 142
   offset: 0, 0
   index: -1
-imgonline-com-ua-Negative-FHKwn8QIaSes
+Close
+  rotate: false
+  xy: 33, 151
+  size: 15, 16
+  orig: 15, 16
+  offset: 0, 0
+  index: -1
+Restart
+  rotate: false
+  xy: 843, 867
+  size: 21, 22
+  orig: 21, 22
+  offset: 0, 0
+  index: -1
+R
+  rotate: false
+  xy: 1, 169
+  size: 840, 720
+  orig: 840, 720
+  offset: 0, 0
+  index: -1
+Restart_down
   rotate: false
   xy: 1, 1
   size: 21, 22
   orig: 21, 22
+  offset: 0, 0
+  index: -1
+imageedit_1_5510822168
+  rotate: false
+  xy: 843, 849
+  size: 15, 16
+  orig: 15, 16
   offset: 0, 0
   index: -1
