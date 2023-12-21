@@ -12,11 +12,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
+import static java.lang.Integer.MAX_VALUE;
+
 
 public class Player extends InputAdapter {
     private final Sound collectSound;
     private final Sound getJump;
-    private int Health = 2;
+    private int Health = 2 ;
     private int jumpCounter = 0;
     PolygonShape playerShape;
     FixtureDef fixtureDef;
@@ -109,7 +111,7 @@ public class Player extends InputAdapter {
 
         TakingDamage();
         isCollecting();
-        Gdx.app.log("Velocity", "X-> " + this.body.getLinearVelocity().x + " " + "Y-> " + this.body.getLinearVelocity().y);
+        System.out.println(this.body.getPosition());
 
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();

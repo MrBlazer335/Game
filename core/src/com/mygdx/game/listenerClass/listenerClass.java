@@ -1,8 +1,6 @@
 package com.mygdx.game.listenerClass;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.Level_maker.Player;
 
 public class listenerClass implements ContactListener {
     @Override
@@ -14,8 +12,7 @@ public class listenerClass implements ContactListener {
             fixtureA.getBody().setUserData(1);
         }
         if (fixtureB.getBody().getUserData() == "Apples") {
-            Gdx.app.log("Contact", "Yes");
-            System.out.println(fixtureB.getBody().getUserData());
+
             fixtureA.getBody().setUserData("Apple");
             fixtureB.getBody().setUserData("DESTROY");
         }

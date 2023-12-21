@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Level_maker.Collectables.Items;
 import com.mygdx.game.Level_maker.EndGoal.Finish;
 import com.mygdx.game.MyGdxGame;
@@ -32,7 +33,10 @@ public class Level_Wrapper implements Screen {
     Items items;
     Finish finish;
 
+
     public Level_Wrapper(final MyGdxGame game) {
+
+
         this.game = game;
         Gdx.graphics.setContinuousRendering(true);
         music = Gdx.audio.newMusic(Gdx.files.internal("audio/The Empire Of Toads.mp3"));
@@ -45,7 +49,7 @@ public class Level_Wrapper implements Screen {
         level = new Level_maker("LEVEL_1.tmx");
         finish = new Finish(level.getWorld());
 
-        items = new Items(10,level,batch);
+        items = new Items(level,batch);
         player = new Player(level.getWorld());
         map = new TmxMapLoader().load("LEVEL_1.tmx");
         mapObjects = map.getLayers().get("physics").getObjects();
@@ -55,8 +59,11 @@ public class Level_Wrapper implements Screen {
         debugRenderer = new Box2DDebugRenderer();
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = level.getCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+
+        camera.setToOrtho(false, 1200, 700);
         camera.update();
+
     }
 
 
@@ -69,7 +76,6 @@ public class Level_Wrapper implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
         music.play();
-
         batch.begin();
         player.render(batch);
         mapRender.setView(camera);
@@ -78,12 +84,11 @@ public class Level_Wrapper implements Screen {
         mapRender.render();
         finish.render(batch);
 
-
         finish.end();
         camera.update();
         items.render();
 
-        debugRenderer.render(level.getWorld(), camera.combined);
+       // debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();
         if (player.getHealth() == 0) {
