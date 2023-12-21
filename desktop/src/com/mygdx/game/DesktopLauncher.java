@@ -9,7 +9,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(120);
-		config.setTitle("Frog 0.1666");
+		config.setTitle("Frog 0.9");
 		config.setWindowedMode(1200,700);
 		new Lwjgl3Application(new MyGdxGame(), config);
 	}
