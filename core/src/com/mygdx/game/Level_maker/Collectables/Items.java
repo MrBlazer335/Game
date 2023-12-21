@@ -11,10 +11,11 @@ import java.util.Objects;
 
 public class Items {
 
-    SpriteBatch batch;
-    ArrayList<Apple> apples = new ArrayList<>();
-    Level_maker level;
-    Apple object;
+    private boolean empty;
+    private SpriteBatch batch;
+    private ArrayList<Apple> apples = new ArrayList<>();
+    private Level_maker level;
+    private Apple object;
 
 
     public Items(int amount, Level_maker level, SpriteBatch batch) {
@@ -37,13 +38,20 @@ public class Items {
         }
     }
 
+    public boolean allApples() {
+        if (apples.isEmpty()) {
+            empty = true;
+        }
+        return empty;
+    }
+
+
     public void render() {
         if (!apples.isEmpty()) {
             for (Apple a : apples) {
                 a.render(batch);
             }
             toDestroy();
-            //Gdx.app.log("Amount", "Amount = " + apples.size());
         }
     }
 }

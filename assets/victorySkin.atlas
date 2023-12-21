@@ -1,0 +1,34 @@
+
+victorySkin.png
+size: 2048, 2048
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+Text (Black) (8x10) export
+  rotate: false
+  xy: 1, 19
+  size: 30, 142
+  orig: 30, 142
+  offset: 0, 0
+  index: -1
+Close
+  rotate: false
+  xy: 1027, 1171
+  size: 15, 16
+  orig: 15, 16
+  offset: 0, 0
+  index: -1
+final_screen
+  rotate: false
+  xy: 1, 163
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
+imageedit_1_5510822168
+  rotate: false
+  xy: 1, 1
+  size: 15, 16
+  orig: 15, 16
+  offset: 0, 0
+  index: -1

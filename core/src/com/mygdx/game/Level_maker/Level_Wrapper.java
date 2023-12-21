@@ -1,6 +1,5 @@
 package com.mygdx.game.Level_maker;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -12,10 +11,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.Level_maker.Collectables.Apple;
 import com.mygdx.game.Level_maker.Collectables.Items;
 import com.mygdx.game.Level_maker.EndGoal.Finish;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.UI.DeathScene;
+import com.mygdx.game.UI.Victory;
 
 public class Level_Wrapper implements Screen {
     final MyGdxGame game;
@@ -77,14 +77,23 @@ public class Level_Wrapper implements Screen {
         camera.zoom = 0.25f;
         mapRender.render();
         finish.render(batch);
+
+
+        finish.end();
         camera.update();
         items.render();
+
         debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();
         if (player.getHealth() == 0) {
             music.stop();
             game.setScreen(new DeathScene(game));
+            dispose();
+        }
+        if (items.allApples() && finish.end()){
+            music.stop();
+            game.setScreen(new Victory(game));
             dispose();
         }
     }

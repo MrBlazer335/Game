@@ -1,10 +1,8 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Level_maker.DeathScene;
-import com.mygdx.game.Menu.MainMenu;
+import com.mygdx.game.UI.MainMenu;
 
 
 public class MyGdxGame extends Game {

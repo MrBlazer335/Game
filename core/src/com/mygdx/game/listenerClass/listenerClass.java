@@ -13,19 +13,18 @@ public class listenerClass implements ContactListener {
         if (fixtureB.getBody().getUserData() == "Spikes") {
             fixtureA.getBody().setUserData(1);
         }
-        if (fixtureB.getBody().getUserData() == "Apples"){
-            Gdx.app.log("Contact","Yes");
+        if (fixtureB.getBody().getUserData() == "Apples") {
+            Gdx.app.log("Contact", "Yes");
             System.out.println(fixtureB.getBody().getUserData());
             fixtureA.getBody().setUserData("Apple");
             fixtureB.getBody().setUserData("DESTROY");
+        }
+            if (fixtureA.getBody().getUserData().equals("Finish")){
+                fixtureA.getBody().setUserData(0);
+            }
 
         }
-        if (fixtureB.getBody().getUserData().equals("Finish")){
-            System.out.println("Wow");
-            Gdx.app.log("Game","Finish!");
-        }
 
-    }
 
 
     @Override
