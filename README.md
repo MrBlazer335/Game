@@ -1,6 +1,6 @@
 ## About Project
-I created this game for the University to improve in Java. Spend a few months for that. The game is only available on Windows, maybe one day I will do it for Android.
-Regret not using PPM. Also there are a lot of places that I could improve with more knowledge and more time to spend.
+I created this game for the University to improve in Java. Spent a few months on that. The game is only available on Windows, maybe one day I will do it for Android.
+Regret not using PPM. Also, there are a lot of places that I could improve with more knowledge and more time to spend.
 
 ## Tools Used for this
 
