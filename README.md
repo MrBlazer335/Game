@@ -10,7 +10,7 @@ GdxTexturePacker - Oh boy, as soon as I understood how it works, it made my life
 SkinComposer - More like SceneComposer. Very useful, and also made my a lot easier
 
 ## About Game
-Just a small platformer on one level. It sounds when the player collects apples which is the main goal and also reaches the end of the map.
+Just a small platformer on one level. It makes sounds when the player collects apples which is the main goal and also reaches the end of the map.
 If the player did not collect all the apples, he would not see the end screen even tho he reached the final goal. There are a lot of spikes, and the clouds are funny, just look for the apples
 
 
