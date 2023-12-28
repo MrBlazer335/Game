@@ -92,13 +92,14 @@ public class Level_Wrapper implements Screen {
         batch.end();
         if (player.getHealth() == 0) {
             music.stop();
-            game.setScreen(new DeathScene(game));
             dispose();
+            game.setScreen(new DeathScene(game));
         }
         if (items.allApples() && finish.end()){
             music.stop();
-            game.setScreen(new Victory(game));
             dispose();
+            game.setScreen(new Victory(game));
+
         }
     }
 

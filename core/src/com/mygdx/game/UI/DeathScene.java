@@ -1,9 +1,12 @@
 package com.mygdx.game.UI;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -11,10 +14,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Level_maker.Level_Wrapper;
-import com.mygdx.game.UI.MainMenu;
 import com.mygdx.game.MyGdxGame;
 
-public class DeathScene implements Screen {
+public class DeathScene extends ScreenAdapter implements Screen   {
     final MyGdxGame game;
     private Skin skin;
 
@@ -26,6 +28,24 @@ public class DeathScene implements Screen {
        stage = new Stage(new StretchViewport(600,700));
        skin = new Skin(Gdx.files.internal("deathSkin.json"));
        Gdx.input.setInputProcessor(stage);
+       stage.addListener(new InputListener() {
+                             @Override
+                             public boolean keyDown(InputEvent event, int keycode) {
+                                 switch (keycode) {
+                                     case Input.Keys.BUTTON_A:
+                                     case Input.Keys.SPACE:
+                                         game.setScreen(new Level_Wrapper(game));
+                                         dispose();
+                                         break;
+                                     case Input.Keys.BUTTON_X:
+                                     case Input.Keys.ESCAPE:
+                                         game.setScreen(new MainMenu(game));
+                                         dispose();
+                                         break;
+                                 }
+                                 return true;
+                             }
+                         });
 
        Table table = new Table();
        table.setFillParent(true);
