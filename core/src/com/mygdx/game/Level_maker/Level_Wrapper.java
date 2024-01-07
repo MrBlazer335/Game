@@ -31,8 +31,8 @@ public class Level_Wrapper implements Screen {
     Player player;
     Items items;
     Finish finish;
-    private final float[][] appleCoordinates = {{395, 252}, {583, 280}, {781, 251}, {1046, 331}, {1184, 315}, {1458, 379}, {1595, 379}, {1632, 640}, {1348, 500}, {1200, 720}, {1031, 715}, {826, 756},
-            {874, 811}, {710, 779}, {710, 859}, {588, 907}, {594, 923}, {619, 987}, {699, 971}, {544, 1034}, {428, 1067}, {376, 1003}, {366, 1131}, {317, 1162}, {286, 1227}};
+    private final float[][] appleCoordinates = {{445, 252}, {623, 280}, {821, 251}, {1096, 331}, {1234, 315}, {1508, 379}, {1645, 379}, {1682, 640}, {1398, 520}, {1261, 720}, {1081, 715}, {876, 756},
+            {929, 811}, {765, 779}, {765, 859}, {643, 907}, {575, 923}, {669, 987}, {749, 971}, {678, 1034}, {571, 1067}, {502, 1003}, {500, 1131}, {447, 1162}, {419, 1227}};
 
 
     public Level_Wrapper(final MyGdxGame game) {
@@ -48,7 +48,7 @@ public class Level_Wrapper implements Screen {
 
         batch = new SpriteBatch();
         level = new Level_maker("LEVEL_1.tmx");
-        finish = new Finish(level.getWorld(), 165, 208);
+        finish = new Finish(level.getWorld(), 210, 208);
 
 
         items = new Items(level, batch, appleCoordinates);
@@ -91,9 +91,8 @@ public class Level_Wrapper implements Screen {
         camera.update();
         items.render();
 
-        Gdx.app.log("Coordinates", finish.getCoordinates().toString());
 
-        debugRenderer.render(level.getWorld(), camera.combined);
+        //debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();
         if (player.getHealth() == 0) {

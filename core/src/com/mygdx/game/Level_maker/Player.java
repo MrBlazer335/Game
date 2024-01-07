@@ -55,7 +55,7 @@ public class Player extends ControllerAdapter {
     float elapsedTime;
 
 
-    public Player(World world,float position_x,float position_y) {
+    public Player(World world, float position_x, float position_y) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         this.position_y = position_y;
@@ -119,13 +119,14 @@ public class Player extends ControllerAdapter {
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();
 
-//        Gdx.app.log("Player", onTheGround + " " + jumpCounter);
-//        Gdx.app.log("Player.position", vel.x + " " + vel.y);
-//        Gdx.app.log("State",CurrentState.toString());
-        Gdx.app.log("Coords",this.body.getPosition().toString());
+        Gdx.app.log("Player", onTheGround + " " + jumpCounter);
+        Gdx.app.log("Player.position", vel.x + " " + vel.y);
+////        Gdx.app.log("State",CurrentState.toString());
+//        Gdx.app.log("Coords", this.body.getPosition().toString());
+
         // movement.start();
 
-        if (this.body.getLinearVelocity().y == 0f) {
+        if (this.body.getLinearVelocity().y == 0) {
             onTheGround = true;
             CurrentState = Player_state.Staying;
             jumpCounter = 0;
@@ -148,20 +149,20 @@ public class Player extends ControllerAdapter {
                 CurrentState = Player_state.Running;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround || Gdx.input.justTouched() && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && onTheGround) {
-                this.body.applyLinearImpulse(0, 2500f,pos.x,pos.y,true);
+                this.body.applyLinearImpulse(0, 2500f, pos.x, pos.y, true);
                 CurrentState = Player_state.Jumping;
                 jumpCounter++;
                 getJump.play(0.1f);
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1 || Gdx.input.justTouched() && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && jumpCounter == 1) {
                 this.body.applyLinearImpulse(0, 2000f, pos.x, pos.y, true);
                 CurrentState = Player_state.DoubleJumping;
-                Gdx.app.log("Pressed","Pressed");
+                Gdx.app.log("Pressed", "Pressed");
                 jumpCounter = 0;
                 getJump.play(0.1f);
             }
         }
 
-        if (vel.y < -2.5f && !onTheGround && CurrentState!=Player_state.DoubleJumping) {
+        if (vel.y < -2.5f && !onTheGround && CurrentState != Player_state.DoubleJumping) {
             CurrentState = Player_state.Falling;
         }
         if (CurrentState.equals(Player_state.Staying)) {
