@@ -16,15 +16,24 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Levels.First_Level;
 import com.mygdx.game.MyGdxGame;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class DeathScene extends ScreenAdapter implements Screen   {
+
+
+    Class[] params = {MyGdxGame.class};
+    final Screen previousScreen;
     final MyGdxGame game;
     private Skin skin;
 
     private Stage stage;
 
 
-   public DeathScene(final MyGdxGame game) {
+   public DeathScene(final MyGdxGame game,Screen screen) {
        this.game = game;
+       this.previousScreen = screen;
+
+
        stage = new Stage(new StretchViewport(600,700));
        skin = new Skin(Gdx.files.internal("deathSkin.json"));
        Gdx.input.setInputProcessor(stage);
@@ -67,8 +76,19 @@ public class DeathScene extends ScreenAdapter implements Screen   {
        button.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y) {
-               game.setScreen(new First_Level(game));
                dispose();
+               try {
+                   game.setScreen(previousScreen.getClass().getConstructor(params).newInstance(game));
+               } catch (InstantiationException e) {
+                   throw new RuntimeException(e);
+               } catch (IllegalAccessException e) {
+                   throw new RuntimeException(e);
+               } catch (InvocationTargetException e) {
+                   throw new RuntimeException(e);
+               } catch (NoSuchMethodException e) {
+                   throw new RuntimeException(e);
+               }
+
 
            }
        });
@@ -103,6 +123,7 @@ public class DeathScene extends ScreenAdapter implements Screen   {
     public void render(float delta) {
         Gdx.gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.app.log("Game",game.getScreen().toString());
         stage.act();
         stage.draw();
     }

@@ -101,7 +101,7 @@ public class Second_Level implements Screen {
         if (player.getHealth() == 0) {
             music.stop();
             dispose();
-            game.setScreen(new DeathScene(game));
+            game.setScreen(new DeathScene(game,this));
         }
         if (items.allApples() && finish.end()) {
             music.stop();

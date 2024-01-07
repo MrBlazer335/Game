@@ -37,8 +37,8 @@ public class First_Level implements Screen {
             {929, 811}, {765, 779}, {765, 859}, {643, 907}, {575, 923}, {669, 987}, {749, 971}, {678, 1034}, {571, 1067}, {502, 1003}, {500, 1131}, {447, 1162}, {419, 1227}};
 
 
-    public First_Level(final MyGdxGame game) {
 
+    public First_Level(final MyGdxGame game) {
 
         this.game = game;
         Gdx.graphics.setContinuousRendering(true);
@@ -99,8 +99,8 @@ public class First_Level implements Screen {
         batch.end();
         if (player.getHealth() == 0) {
             music.stop();
-            dispose();
-            game.setScreen(new DeathScene(game));
+            this.dispose();
+            game.setScreen(new DeathScene(game,this));
         }
         if (items.allApples() && finish.end()) {
             music.stop();
@@ -132,6 +132,5 @@ public class First_Level implements Screen {
 
     @Override
     public void dispose() {
-
     }
 }
