@@ -3,6 +3,7 @@ package com.mygdx.game.Level_maker.EndGoal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Finish {
@@ -11,9 +12,9 @@ public class Finish {
     private boolean isItReached;
     private final Body endBody;
     private final Texture texture;
-    public Finish(World world){
-        position_x = 70;
-        position_y = 48;
+    public Finish(World world,int position_x,int position_y){
+        this.position_x = position_x;
+        this.position_y = position_y;
         texture = new Texture(Gdx.files.internal("Textures/Png Files/End (Idle).png"));
         BodyDef endBlock1 = new BodyDef();
         endBlock1.type = BodyDef.BodyType.StaticBody;
@@ -38,5 +39,8 @@ public class Finish {
             isItReached = true;
         }
         return isItReached;
+    }
+    public Vector2 getCoordinates(){
+        return new Vector2(position_x,position_y);
     }
 }

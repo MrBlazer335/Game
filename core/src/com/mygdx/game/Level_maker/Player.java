@@ -15,13 +15,16 @@ import com.mygdx.game.Controllers.Movement;
 
 
 public class Player extends ControllerAdapter {
+    private final float position_x;
+    private final float position_y;
     private final Sound collectSound;
     private final Sound getJump;
-    private int Health = 2 ;
+    private int Health = 2;
     private int jumpCounter = 0;
     PolygonShape playerShape;
     FixtureDef fixtureDef;
     private final Body body;
+    private boolean onTheGround;
     private final Movement movement;
     private final TextureAtlas RunningPlayer;
     private final TextureAtlas IdlePlayer;
@@ -42,10 +45,6 @@ public class Player extends ControllerAdapter {
     Animation<TextureRegion> PlayerIsDying;
 
 
-
-
-
-
     enum Facing {LEFT, RIGHT}
 
     Facing facing = Facing.LEFT;
@@ -56,11 +55,11 @@ public class Player extends ControllerAdapter {
     float elapsedTime;
 
 
-    public Player(World world) {
+    public Player(World world,float position_x,float position_y) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        float position_y = 80;
-        float position_x = 200;
+        this.position_y = position_y;
+        this.position_x = position_x;
         bodyDef.position.set(position_x, position_y);
         //Sounds
         collectSound = Gdx.audio.newSound(Gdx.files.internal("audio/Fruit_collect.wav"));
@@ -104,8 +103,7 @@ public class Player extends ControllerAdapter {
         body.setFixedRotation(true);
         body.setUserData(0);
 
-       movement = new Movement(this);
-
+        movement = new Movement(this);
 
 
     }
@@ -121,16 +119,22 @@ public class Player extends ControllerAdapter {
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();
 
-       // movement.start();
-        boolean onTheGround = true;
-        if (vel.y > -0.1f && vel.y < 0.1f) {
+//        Gdx.app.log("Player", onTheGround + " " + jumpCounter);
+//        Gdx.app.log("Player.position", vel.x + " " + vel.y);
+//        Gdx.app.log("State",CurrentState.toString());
+        Gdx.app.log("Coords",this.body.getPosition().toString());
+        // movement.start();
+
+        if (this.body.getLinearVelocity().y == 0f) {
+            onTheGround = true;
+            CurrentState = Player_state.Staying;
             jumpCounter = 0;
 
         } else {
             onTheGround = false;
         }
         if (CurrentState != Player_state.Dying) {
-          float playersSpeed = 50.0f;
+            float playersSpeed = 50.0f;
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 facing = Facing.LEFT;
                 this.body.applyLinearImpulse(-playersSpeed, 0, pos.x, pos.y, true);
@@ -144,23 +148,24 @@ public class Player extends ControllerAdapter {
                 CurrentState = Player_state.Running;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround || Gdx.input.justTouched() && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && onTheGround) {
-                this.body.setLinearVelocity(0,2500f);
+                this.body.applyLinearImpulse(0, 2500f,pos.x,pos.y,true);
                 CurrentState = Player_state.Jumping;
                 jumpCounter++;
                 getJump.play(0.1f);
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1 || Gdx.input.justTouched() && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && jumpCounter == 1) {
                 this.body.applyLinearImpulse(0, 2000f, pos.x, pos.y, true);
                 CurrentState = Player_state.DoubleJumping;
+                Gdx.app.log("Pressed","Pressed");
                 jumpCounter = 0;
                 getJump.play(0.1f);
             }
         }
 
-        if (vel.y < -2.5f && !onTheGround) {
+        if (vel.y < -2.5f && !onTheGround && CurrentState!=Player_state.DoubleJumping) {
             CurrentState = Player_state.Falling;
         }
-        if (this.body.getLinearVelocity().len() == 0 && CurrentState != Player_state.Dying) {
-            CurrentState = Player_state.Staying;
+        if (CurrentState.equals(Player_state.Staying)) {
+            onTheGround = true;
         }
 
 
@@ -230,7 +235,8 @@ public class Player extends ControllerAdapter {
             collectSound.play(0.3f);
         }
     }
-    public Body getBody(){
+
+    public Body getBody() {
         return this.body;
     }
 

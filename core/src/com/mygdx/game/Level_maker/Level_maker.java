@@ -56,7 +56,7 @@ public class Level_maker {
 
         Shape shape = createPolygonShape(polygonMapObject);
         body.createFixture(shape, 1000.0f);
-        body.setUserData("Damage");
+        body.setUserData("Block");
         shape.dispose();
     }
 
