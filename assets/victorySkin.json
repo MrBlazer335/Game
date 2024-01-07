@@ -1,26 +1,12 @@
 {
-com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	Text_Black_8x10_export: {
-		file: Text (Black) (8x10) export.fnt
-		scaledSize: -1
-		markupEnabled: false
-		flip: false
-	}
-}
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
 		up: Close
 		down: imageedit_1_5510822168
 	}
-}
-com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-	default: {
-		font: Text_Black_8x10_export
-	}
-}
-com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
-	default: {
-		label: default
+	next: {
+		up: Next
+		down: imageedit_1_5714522394
 	}
 }
 }

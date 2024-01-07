@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.Controllers.Movement;
 
 
 public class Player extends ControllerAdapter {
@@ -21,11 +20,11 @@ public class Player extends ControllerAdapter {
     private final Sound getJump;
     private int Health = 2;
     private int jumpCounter = 0;
-    PolygonShape playerShape;
-    FixtureDef fixtureDef;
+    private PolygonShape playerShape;
+    private FixtureDef fixtureDef;
     private final Body body;
     private boolean onTheGround;
-    private final Movement movement;
+
     private final TextureAtlas RunningPlayer;
     private final TextureAtlas IdlePlayer;
     private final TextureAtlas BIdlePlayer;
@@ -47,11 +46,11 @@ public class Player extends ControllerAdapter {
 
     enum Facing {LEFT, RIGHT}
 
-    Facing facing = Facing.LEFT;
+   private Facing facing = Facing.LEFT;
 
     enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping, Dying}
 
-    Player_state CurrentState = Player_state.Staying;
+    private Player_state CurrentState = Player_state.Staying;
     float elapsedTime;
 
 
@@ -103,7 +102,7 @@ public class Player extends ControllerAdapter {
         body.setFixedRotation(true);
         body.setUserData(0);
 
-        movement = new Movement(this);
+
 
 
     }
@@ -119,10 +118,10 @@ public class Player extends ControllerAdapter {
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();
 
-        Gdx.app.log("Player", onTheGround + " " + jumpCounter);
-        Gdx.app.log("Player.position", vel.x + " " + vel.y);
-////        Gdx.app.log("State",CurrentState.toString());
-//        Gdx.app.log("Coords", this.body.getPosition().toString());
+//        Gdx.app.log("Player", onTheGround + " " + jumpCounter);
+//        Gdx.app.log("Player.position", vel.x + " " + vel.y);
+//////        Gdx.app.log("State",CurrentState.toString());
+////        Gdx.app.log("Coords", this.body.getPosition().toString());
 
         // movement.start();
 
@@ -154,6 +153,7 @@ public class Player extends ControllerAdapter {
                 jumpCounter++;
                 getJump.play(0.1f);
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1 || Gdx.input.justTouched() && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && jumpCounter == 1) {
+                this.body.setLinearVelocity(vel.x,0);
                 this.body.applyLinearImpulse(0, 2000f, pos.x, pos.y, true);
                 CurrentState = Player_state.DoubleJumping;
                 Gdx.app.log("Pressed", "Pressed");

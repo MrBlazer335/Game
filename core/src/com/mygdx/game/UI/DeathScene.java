@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.mygdx.game.Level_maker.Level_Wrapper;
+import com.mygdx.game.Levels.First_Level;
 import com.mygdx.game.MyGdxGame;
 
 public class DeathScene extends ScreenAdapter implements Screen   {
@@ -34,7 +34,7 @@ public class DeathScene extends ScreenAdapter implements Screen   {
                                  switch (keycode) {
                                      case Input.Keys.BUTTON_A:
                                      case Input.Keys.SPACE:
-                                         game.setScreen(new Level_Wrapper(game));
+                                         game.setScreen(new First_Level(game));
                                          dispose();
                                          break;
                                      case Input.Keys.BUTTON_X:
@@ -67,7 +67,7 @@ public class DeathScene extends ScreenAdapter implements Screen   {
        button.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y) {
-               game.setScreen(new Level_Wrapper(game));
+               game.setScreen(new First_Level(game));
                dispose();
 
            }

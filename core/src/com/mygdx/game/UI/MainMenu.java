@@ -10,20 +10,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.mygdx.game.Level_maker.Level_Wrapper;
+import com.mygdx.game.Levels.First_Level;
+import com.mygdx.game.Levels.Second_Level;
 import com.mygdx.game.MyGdxGame;
 
 public class MainMenu implements Screen {
     final MyGdxGame game;
     Boolean start_the_game = false;
-    Level_Wrapper levelWrapper;
+    First_Level levelWrapper;
     private Skin skin;
 
     private Stage stage;
 
     public MainMenu(final MyGdxGame game) {
         this.game = game;
-        levelWrapper = new Level_Wrapper(game);
+        levelWrapper = new First_Level(game);
         stage = new Stage(new StretchViewport(600,600));
         skin = new Skin(Gdx.files.internal("skin.json"));
         Gdx.input.setInputProcessor(stage);
@@ -80,7 +81,7 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (start_the_game.equals(true)) {
-            game.setScreen(new Level_Wrapper(game));
+            game.setScreen(new Second_Level(game));
             dispose();
         }
         stage.act();

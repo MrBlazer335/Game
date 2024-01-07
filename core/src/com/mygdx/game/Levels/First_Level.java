@@ -1,4 +1,4 @@
-package com.mygdx.game.Level_maker;
+package com.mygdx.game.Levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,11 +13,13 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Level_maker.Collectables.Items;
 import com.mygdx.game.Level_maker.EndGoal.Finish;
+import com.mygdx.game.Level_maker.Level_maker;
+import com.mygdx.game.Level_maker.Player;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.UI.DeathScene;
 import com.mygdx.game.UI.Victory;
 
-public class Level_Wrapper implements Screen {
+public class First_Level implements Screen {
     final MyGdxGame game;
     Music music;
     SpriteBatch batch;
@@ -35,7 +37,7 @@ public class Level_Wrapper implements Screen {
             {929, 811}, {765, 779}, {765, 859}, {643, 907}, {575, 923}, {669, 987}, {749, 971}, {678, 1034}, {571, 1067}, {502, 1003}, {500, 1131}, {447, 1162}, {419, 1227}};
 
 
-    public Level_Wrapper(final MyGdxGame game) {
+    public First_Level(final MyGdxGame game) {
 
 
         this.game = game;
