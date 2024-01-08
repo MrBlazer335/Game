@@ -112,8 +112,7 @@ public class Player extends ControllerAdapter {
     }
 
     public void render(SpriteBatch batch) {
-        System.out.println(CurrentState);
-        System.out.println(facing);
+
         TakingDamage();
         isCollecting();
         vel = this.body.getLinearVelocity();
@@ -124,17 +123,24 @@ public class Player extends ControllerAdapter {
 //        Gdx.app.log("State",CurrentState.toString());
 //       Gdx.app.log("Coords", this.body.getPosition().toString());
 
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
 
-        staying();
-        moveLeft();
-        moveRight();
-        jump();
-        falling();
+
+            staying();
+            moveLeft();
+            moveRight();
+            jump();
+            falling();
+        }
         animate();
+    }
+
+    public void draw(SpriteBatch batch) {
+        elapsedTime += Gdx.graphics.getDeltaTime();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x - 16f, pos.y - 12.5f);
     }
-
 
     public void TakingDamage() {
         if (this.body.getUserData() == (Integer) (1)) {
@@ -175,9 +181,6 @@ public class Player extends ControllerAdapter {
     }
 
     public void animate() {
-        elapsedTime += Gdx.graphics.getDeltaTime();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         if (CurrentState.equals(Player_state.Running) && facing.equals(Facing.RIGHT) && onTheGround) {
             animation = new Animation<>(1 / 20f, RunningPlayer.getRegions());
@@ -249,6 +252,7 @@ public class Player extends ControllerAdapter {
 
         }
     }
+
     public void staying() {
         if (this.body.getLinearVelocity().y == 0) {
             onTheGround = true;
@@ -259,7 +263,8 @@ public class Player extends ControllerAdapter {
             onTheGround = false;
         }
     }
-    public void falling(){
+
+    public void falling() {
         if (vel.y < -2.5f && !onTheGround && CurrentState != Player_state.DoubleJumping) {
             CurrentState = Player_state.Falling;
         }

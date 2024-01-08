@@ -81,7 +81,7 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (start_the_game.equals(true)) {
-            game.setScreen(new Second_Level(game));
+            game.setScreen(new First_Level(game));
             dispose();
         }
         stage.act();

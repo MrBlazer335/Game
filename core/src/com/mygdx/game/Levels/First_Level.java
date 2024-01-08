@@ -35,6 +35,7 @@ public class First_Level implements Screen {
     Player player;
     Items items;
     Finish finish;
+    Movement movement;
     private final float[][] appleCoordinates = {{445, 252}, {623, 280}, {821, 251}, {1096, 331}, {1234, 315}, {1508, 379}, {1645, 379}, {1682, 640}, {1398, 520}, {1261, 720}, {1081, 715}, {876, 756},
             {929, 811}, {765, 779}, {765, 859}, {643, 907}, {575, 923}, {669, 987}, {749, 971}, {678, 1034}, {571, 1067}, {502, 1003}, {500, 1131}, {447, 1162}, {419, 1227}};
 
@@ -68,6 +69,9 @@ public class First_Level implements Screen {
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = level.getCamera();
 
+        if (Gdx.app.getType().equals(Application.ApplicationType.Android)){
+            movement = new Movement(player);
+        }
 
         camera.setToOrtho(false, 1200, 800);
         camera.update();
@@ -87,6 +91,7 @@ public class First_Level implements Screen {
         batch.begin();
 
         player.render(batch);
+        player.draw(batch);
         mapRender.setView(camera);
 
         camera.position.set(player.CameraCordsX(), player.CameraCordsY(), 0);
@@ -97,11 +102,13 @@ public class First_Level implements Screen {
         finish.end();
         camera.update();
         items.render();
-        Movement movement = new Movement(player,batch);
 
         //debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
         batch.end();
+        if (movement!=null){
+            movement.render();
+        }
         if (player.getHealth() == 0) {
             music.stop();
             this.dispose();

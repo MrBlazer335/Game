@@ -1,5 +1,6 @@
 package com.mygdx.game.Levels;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -38,7 +39,7 @@ public class Second_Level implements Screen {
     private final Level_maker level;
     private final Player player;
     private final Items items;
-    private final Movement movement;
+    private Movement movement;
     private final Finish finish;
     private final float[][] appleCoordinates = {{300, 250}};
 
@@ -69,9 +70,9 @@ public class Second_Level implements Screen {
         debugRenderer = new Box2DDebugRenderer();
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = level.getCamera();
-
-        movement = new Movement(player, batch);
-
+        if (Gdx.app.getType().equals(Application.ApplicationType.Android)) {
+            movement = new Movement(player);
+        }
         camera.setToOrtho(false, 1200, 800);
         camera.update();
 
@@ -93,6 +94,8 @@ public class Second_Level implements Screen {
 
         player.render(batch);
 
+        player.draw(batch);
+
         mapRender.setView(camera);
 
         camera.position.set(player.CameraCordsX(), player.CameraCordsY(), 0);
@@ -105,12 +108,13 @@ public class Second_Level implements Screen {
         items.render();
 
 
-
         //debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
 
         batch.end();
-        movement.render();
+        if (movement != null) {
+            movement.render();
+        }
         if (player.getHealth() == 0) {
             music.stop();
             dispose();
