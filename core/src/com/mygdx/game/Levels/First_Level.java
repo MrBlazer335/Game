@@ -1,5 +1,6 @@
 package com.mygdx.game.Levels;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Controllers.Movement;
 import com.mygdx.game.Level_maker.Collectables.Items;
 import com.mygdx.game.Level_maker.EndGoal.Finish;
 import com.mygdx.game.Level_maker.Level_maker;
@@ -37,7 +39,6 @@ public class First_Level implements Screen {
             {929, 811}, {765, 779}, {765, 859}, {643, 907}, {575, 923}, {669, 987}, {749, 971}, {678, 1034}, {571, 1067}, {502, 1003}, {500, 1131}, {447, 1162}, {419, 1227}};
 
 
-
     public First_Level(final MyGdxGame game) {
 
         this.game = game;
@@ -54,7 +55,10 @@ public class First_Level implements Screen {
 
 
         items = new Items(level, batch, appleCoordinates);
-        player = new Player(level.getWorld(), 320, 208);
+        player = new Player(level.getWorld(), 320, 215);
+
+
+
         map = new TmxMapLoader().load("LEVEL_1.tmx");
         mapObjects = map.getLayers().get("physics").getObjects();
         Danger = map.getLayers().get("Damage").getObjects();
@@ -81,6 +85,7 @@ public class First_Level implements Screen {
         ScreenUtils.clear(1, 1, 1, 1);
         music.play();
         batch.begin();
+
         player.render(batch);
         mapRender.setView(camera);
 
@@ -92,7 +97,7 @@ public class First_Level implements Screen {
         finish.end();
         camera.update();
         items.render();
-
+        Movement movement = new Movement(player,batch);
 
         //debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
@@ -100,7 +105,7 @@ public class First_Level implements Screen {
         if (player.getHealth() == 0) {
             music.stop();
             this.dispose();
-            game.setScreen(new DeathScene(game,this));
+            game.setScreen(new DeathScene(game, this));
         }
         if (items.allApples() && finish.end()) {
             music.stop();

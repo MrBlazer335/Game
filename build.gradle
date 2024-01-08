@@ -50,6 +50,8 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
+
         
     }
 }
@@ -58,6 +60,7 @@ project(":android") {
     apply plugin: "com.android.application"
 
     configurations { natives }
+
 
     dependencies {
         implementation project(":core")
@@ -72,7 +75,9 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
-        
+
+
+
     }
 }
 
@@ -80,10 +85,25 @@ project(":core") {
     apply plugin: "java-library"
 
 
+
     dependencies {
+
         implementation "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+
+        implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        allprojects {
+            repositories {
+                mavenCentral()
+            }
+        }
+        dependencies {
+            implementation 'com.crashinvaders.vfx:gdx-vfx-core:0.5.4'
+            implementation 'com.crashinvaders.vfx:gdx-vfx-effects:0.5.4'
+            // Optional, if you need standard filter/effects.
+        }
         
     }
 }

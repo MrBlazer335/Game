@@ -1,5 +1,6 @@
 package com.mygdx.game.Level_maker;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -13,17 +14,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 
+
 public class Player extends ControllerAdapter {
     private final float position_x;
     private final float position_y;
     private final Sound collectSound;
-    private final Sound getJump;
+    public  final Sound getJump;
     private int Health = 2;
-    private int jumpCounter = 0;
+    public int jumpCounter = 0;
     private PolygonShape playerShape;
     private FixtureDef fixtureDef;
     private final Body body;
-    private boolean onTheGround;
+    public boolean onTheGround;
 
     private final TextureAtlas RunningPlayer;
     private final TextureAtlas IdlePlayer;
@@ -44,13 +46,13 @@ public class Player extends ControllerAdapter {
     Animation<TextureRegion> PlayerIsDying;
 
 
-    enum Facing {LEFT, RIGHT}
+    public enum Facing {LEFT, RIGHT}
 
-   private Facing facing = Facing.LEFT;
+   public Facing facing = Facing.LEFT;
 
-    enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping, Dying}
+    public enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping, Dying}
 
-    private Player_state CurrentState = Player_state.Staying;
+    public Player_state CurrentState = Player_state.Staying;
     float elapsedTime;
 
 
@@ -112,7 +114,8 @@ public class Player extends ControllerAdapter {
     }
 
     public void render(SpriteBatch batch) {
-
+        System.out.println(CurrentState);
+        System.out.println(facing);
         TakingDamage();
         isCollecting();
         Vector2 vel = this.body.getLinearVelocity();
@@ -120,10 +123,10 @@ public class Player extends ControllerAdapter {
 
 //        Gdx.app.log("Player", onTheGround + " " + jumpCounter);
 //        Gdx.app.log("Player.position", vel.x + " " + vel.y);
-//////        Gdx.app.log("State",CurrentState.toString());
-////        Gdx.app.log("Coords", this.body.getPosition().toString());
+//        Gdx.app.log("State",CurrentState.toString());
+//       Gdx.app.log("Coords", this.body.getPosition().toString());
 
-        // movement.start();
+
 
         if (this.body.getLinearVelocity().y == 0) {
             onTheGround = true;
@@ -135,39 +138,38 @@ public class Player extends ControllerAdapter {
         }
         if (CurrentState != Player_state.Dying) {
             float playersSpeed = 50.0f;
-            if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.L) || Gdx.input.isKeyPressed(Input.Keys.NUM_0)) {
                 facing = Facing.LEFT;
                 this.body.applyLinearImpulse(-playersSpeed, 0, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
 
             }
 
-            if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.L) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 facing = Facing.RIGHT;
                 this.body.applyLinearImpulse(playersSpeed, 0, pos.x, pos.y, true);
                 CurrentState = Player_state.Running;
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround || Gdx.input.justTouched() && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && onTheGround) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.L) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround ||  Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && onTheGround) {
                 this.body.applyLinearImpulse(0, 2500f, pos.x, pos.y, true);
                 CurrentState = Player_state.Jumping;
                 jumpCounter++;
                 getJump.play(0.1f);
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1 || Gdx.input.justTouched() && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && jumpCounter == 1) {
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.L) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && jumpCounter == 1) {
                 this.body.setLinearVelocity(vel.x,0);
                 this.body.applyLinearImpulse(0, 2000f, pos.x, pos.y, true);
                 CurrentState = Player_state.DoubleJumping;
-                Gdx.app.log("Pressed", "Pressed");
+
                 jumpCounter = 0;
                 getJump.play(0.1f);
+
             }
         }
 
         if (vel.y < -2.5f && !onTheGround && CurrentState != Player_state.DoubleJumping) {
             CurrentState = Player_state.Falling;
         }
-        if (CurrentState.equals(Player_state.Staying)) {
-            onTheGround = true;
-        }
+
 
 
         elapsedTime += Gdx.graphics.getDeltaTime();
@@ -237,8 +239,13 @@ public class Player extends ControllerAdapter {
         }
     }
 
+
     public Body getBody() {
         return this.body;
+    }
+
+    public void setCurrentState(Player_state playerState){
+        CurrentState = playerState;
     }
 
 }

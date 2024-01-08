@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -11,6 +12,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.crashinvaders.vfx.VfxManager;
+import com.crashinvaders.vfx.effects.GaussianBlurEffect;
+import com.crashinvaders.vfx.effects.VfxEffect;
+import com.mygdx.game.Controllers.Movement;
 import com.mygdx.game.Level_maker.Collectables.Items;
 import com.mygdx.game.Level_maker.EndGoal.Finish;
 import com.mygdx.game.Level_maker.Level_maker;
@@ -19,21 +24,23 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.UI.DeathScene;
 import com.mygdx.game.UI.Victory;
 
+
 public class Second_Level implements Screen {
     final MyGdxGame game;
     Music music;
-    SpriteBatch batch;
-    OrthographicCamera camera;
-    OrthogonalTiledMapRenderer mapRender;
-    MapObjects mapObjects;
-    MapObjects Danger;
-    Box2DDebugRenderer debugRenderer;
-    TiledMap map;
-    Level_maker level;
-    Player player;
-    Items items;
-    Finish finish;
-    private final float[][] appleCoordinates = {{300,250}};
+    private final SpriteBatch batch;
+    private final OrthographicCamera camera;
+    private final OrthogonalTiledMapRenderer mapRender;
+    private final MapObjects mapObjects;
+    private final MapObjects Danger;
+    private final Box2DDebugRenderer debugRenderer;
+    private final TiledMap map;
+    private final Level_maker level;
+    private final Player player;
+    private final Items items;
+    private final Movement movement;
+    private final Finish finish;
+    private final float[][] appleCoordinates = {{300, 250}};
 
 
     public Second_Level(final MyGdxGame game) {
@@ -63,6 +70,7 @@ public class Second_Level implements Screen {
         mapRender = new OrthogonalTiledMapRenderer(map);
         camera = level.getCamera();
 
+        movement = new Movement(player, batch);
 
         camera.setToOrtho(false, 1200, 800);
         camera.update();
@@ -77,13 +85,15 @@ public class Second_Level implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(1, 1, 1, 1);
+        ScreenUtils.clear(0, 0, 0, 0);
+
         music.play();
         batch.begin();
-        player.render(batch);
-        mapRender.setView(camera);
 
-        Gdx.app.log("Game",game.getScreen().toString());
+
+        player.render(batch);
+
+        mapRender.setView(camera);
 
         camera.position.set(player.CameraCordsX(), player.CameraCordsY(), 0);
         camera.zoom = 0.25f;
@@ -95,13 +105,16 @@ public class Second_Level implements Screen {
         items.render();
 
 
+
         //debugRenderer.render(level.getWorld(), camera.combined);
         level.getWorld().step(1 / 15f, 6, 2);
+
         batch.end();
+        movement.render();
         if (player.getHealth() == 0) {
             music.stop();
             dispose();
-            game.setScreen(new DeathScene(game,this));
+            game.setScreen(new DeathScene(game, this));
         }
         if (items.allApples() && finish.end()) {
             music.stop();
