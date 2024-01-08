@@ -14,18 +14,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 
-
 public class Player extends ControllerAdapter {
-    private final float position_x;
-    private final float position_y;
+
     private final Sound collectSound;
-    public  final Sound getJump;
+    private final float playersSpeed = 50f;
+    public final Sound getJump;
     private int Health = 2;
     public int jumpCounter = 0;
     private PolygonShape playerShape;
     private FixtureDef fixtureDef;
     private final Body body;
     public boolean onTheGround;
+
+    Vector2 pos;
+    Vector2 vel;
 
     private final TextureAtlas RunningPlayer;
     private final TextureAtlas IdlePlayer;
@@ -39,7 +41,7 @@ public class Player extends ControllerAdapter {
     private final TextureAtlas DyingPlayer;
 
 
-    Animation<TextureRegion> animation;
+    public Animation<TextureRegion> animation;
 
 //Dying Part
 
@@ -48,7 +50,7 @@ public class Player extends ControllerAdapter {
 
     public enum Facing {LEFT, RIGHT}
 
-   public Facing facing = Facing.LEFT;
+    public Facing facing = Facing.LEFT;
 
     public enum Player_state {Running, Staying, Jumping, Falling, DoubleJumping, Dying}
 
@@ -59,8 +61,6 @@ public class Player extends ControllerAdapter {
     public Player(World world, float position_x, float position_y) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        this.position_y = position_y;
-        this.position_x = position_x;
         bodyDef.position.set(position_x, position_y);
         //Sounds
         collectSound = Gdx.audio.newSound(Gdx.files.internal("audio/Fruit_collect.wav"));
@@ -105,8 +105,6 @@ public class Player extends ControllerAdapter {
         body.setUserData(0);
 
 
-
-
     }
 
     public int getHealth() {
@@ -118,8 +116,8 @@ public class Player extends ControllerAdapter {
         System.out.println(facing);
         TakingDamage();
         isCollecting();
-        Vector2 vel = this.body.getLinearVelocity();
-        Vector2 pos = this.body.getPosition();
+        vel = this.body.getLinearVelocity();
+        pos = this.body.getPosition();
 
 //        Gdx.app.log("Player", onTheGround + " " + jumpCounter);
 //        Gdx.app.log("Player.position", vel.x + " " + vel.y);
@@ -127,51 +125,56 @@ public class Player extends ControllerAdapter {
 //       Gdx.app.log("Coords", this.body.getPosition().toString());
 
 
+        staying();
+        moveLeft();
+        moveRight();
+        jump();
+        falling();
+        animate();
 
-        if (this.body.getLinearVelocity().y == 0) {
-            onTheGround = true;
-            CurrentState = Player_state.Staying;
-            jumpCounter = 0;
+        batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x - 16f, pos.y - 12.5f);
+    }
 
-        } else {
-            onTheGround = false;
+
+    public void TakingDamage() {
+        if (this.body.getUserData() == (Integer) (1)) {
+            Health--;
         }
-        if (CurrentState != Player_state.Dying) {
-            float playersSpeed = 50.0f;
-            if (Gdx.input.isKeyPressed(Input.Keys.L) || Gdx.input.isKeyPressed(Input.Keys.NUM_0)) {
-                facing = Facing.LEFT;
-                this.body.applyLinearImpulse(-playersSpeed, 0, pos.x, pos.y, true);
-                CurrentState = Player_state.Running;
+    }
 
-            }
 
-            if (Gdx.input.isKeyPressed(Input.Keys.L) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                facing = Facing.RIGHT;
-                this.body.applyLinearImpulse(playersSpeed, 0, pos.x, pos.y, true);
-                CurrentState = Player_state.Running;
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.L) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround ||  Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && onTheGround) {
-                this.body.applyLinearImpulse(0, 2500f, pos.x, pos.y, true);
-                CurrentState = Player_state.Jumping;
-                jumpCounter++;
-                getJump.play(0.1f);
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.L) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && jumpCounter == 1) {
-                this.body.setLinearVelocity(vel.x,0);
-                this.body.applyLinearImpulse(0, 2000f, pos.x, pos.y, true);
-                CurrentState = Player_state.DoubleJumping;
+    public float CameraCordsX() {
+        Vector2 vector2;
+        vector2 = this.body.getPosition();
+        return vector2.x;
+    }
 
-                jumpCounter = 0;
-                getJump.play(0.1f);
+    public float CameraCordsY() {
+        Vector2 vector2;
+        vector2 = this.body.getPosition();
+        return vector2.y;
+    }
 
-            }
+    public void isCollecting() {
+        if (this.body.getUserData().equals("Apple")) {
+            collectSound.play(0.3f);
         }
-
-        if (vel.y < -2.5f && !onTheGround && CurrentState != Player_state.DoubleJumping) {
-            CurrentState = Player_state.Falling;
-        }
+    }
 
 
+    public Body getBody() {
+        return this.body;
+    }
 
+    public void setCurrentState(Player_state playerState) {
+        CurrentState = playerState;
+    }
+
+    public void setFacing(Facing facing) {
+        this.facing = facing;
+    }
+
+    public void animate() {
         elapsedTime += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -210,42 +213,56 @@ public class Player extends ControllerAdapter {
         if (CurrentState.equals(Player_state.Dying)) {
             animation = new Animation<>(1 / 15f, DyingPlayer.getRegions());
         }
-        batch.draw(animation.getKeyFrame(elapsedTime, true), pos.x - 16f, pos.y - 12.5f);
     }
 
+    public void moveLeft() {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            facing = Facing.LEFT;
+            float playersSpeed = 50f;
+            this.body.applyLinearImpulse(-playersSpeed, 0, pos.x, pos.y, true);
+            CurrentState = Player_state.Running;
 
-    public void TakingDamage() {
-        if (this.body.getUserData() == (Integer) (1)) {
-            Health--;
         }
     }
 
-
-    public float CameraCordsX() {
-        Vector2 vector2;
-        vector2 = this.body.getPosition();
-        return vector2.x;
-    }
-
-    public float CameraCordsY() {
-        Vector2 vector2;
-        vector2 = this.body.getPosition();
-        return vector2.y;
-    }
-
-    public void isCollecting() {
-        if (this.body.getUserData().equals("Apple")) {
-            collectSound.play(0.3f);
+    public void moveRight() {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            facing = Facing.RIGHT;
+            this.body.applyLinearImpulse(playersSpeed, 0, pos.x, pos.y, true);
+            CurrentState = Player_state.Running;
         }
     }
 
+    public void jump() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && onTheGround) {
+            this.body.applyLinearImpulse(0, 2500f, pos.x, pos.y, true);
+            CurrentState = Player_state.Jumping;
+            jumpCounter++;
+            getJump.play(0.1f);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && jumpCounter == 1) {
+            this.body.setLinearVelocity(vel.x, 0);
+            this.body.applyLinearImpulse(0, 2000f, pos.x, pos.y, true);
+            CurrentState = Player_state.DoubleJumping;
 
-    public Body getBody() {
-        return this.body;
+            jumpCounter = 0;
+            getJump.play(0.1f);
+
+        }
     }
+    public void staying() {
+        if (this.body.getLinearVelocity().y == 0) {
+            onTheGround = true;
+            CurrentState = Player_state.Staying;
+            jumpCounter = 0;
 
-    public void setCurrentState(Player_state playerState){
-        CurrentState = playerState;
+        } else {
+            onTheGround = false;
+        }
     }
-
+    public void falling(){
+        if (vel.y < -2.5f && !onTheGround && CurrentState != Player_state.DoubleJumping) {
+            CurrentState = Player_state.Falling;
+        }
+    }
 }
+

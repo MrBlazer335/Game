@@ -1,5 +1,6 @@
 package com.mygdx.game.Controllers;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -15,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.mygdx.game.Level_maker.Player;
 
-public class Movement extends InputAdapter {
+public class Movement extends ApplicationAdapter {
     private final Image leftArrowUP = new Image(new Texture(Gdx.files.internal("Textures/Buttons/blue-!arrowleft.png")));
     private final Image leftArrowDOWN = new Image(new Texture(Gdx.files.internal("Textures/Buttons/blue-!arrowleft-pushed.png")));
     private final Image rightArrowUP = new Image(new Texture(Gdx.files.internal("Textures/Buttons/blue-!arrowright.png")));
@@ -73,51 +74,34 @@ public class Movement extends InputAdapter {
 
         Vector2 vel = this.body.getLinearVelocity();
         Vector2 pos = this.body.getPosition();
+        float playerSpeed =50f;
         if (vel.y==0){
             playerControlling.onTheGround = true;
         }
 
-        float playersSpeed = 50f;
-         if(Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            playerControlling.facing = Player.Facing.LEFT;
-            this.body.applyLinearImpulse(-playersSpeed, 0, pos.x, pos.y, true);
-            playerControlling.setCurrentState(Player.Player_state.Running);
 
-        }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            playerControlling.facing = Player.Facing.RIGHT;
-            this.body.applyLinearImpulse(playersSpeed, 0, pos.x, pos.y, true);
-            playerControlling.setCurrentState(Player.Player_state.Running);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && playerControlling.onTheGround || Gdx.input.isKeyJustPressed(Input.Keys.UP) && playerControlling.onTheGround ||  Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && playerControlling.onTheGround) {
-            this.body.applyLinearImpulse(0, 2500f, pos.x, pos.y, true);
-            playerControlling.CurrentState = Player.Player_state.Jumping;
-            playerControlling.jumpCounter++;
-            playerControlling.getJump.play(0.1f);
-        }else  if (Gdx.input.isKeyJustPressed(Input.Keys.W) && playerControlling.jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.UP) && playerControlling.jumpCounter == 1 || Gdx.input.isKeyJustPressed(Input.Keys.BUTTON_A) && playerControlling.jumpCounter == 1) {
-            this.body.setLinearVelocity(vel.x,0);
-            this.body.applyLinearImpulse(0, 2000f, pos.x, pos.y, true);
-            playerControlling.CurrentState = Player.Player_state.DoubleJumping;
 
-            playerControlling.jumpCounter = 0;
-            playerControlling.getJump.play(0.1f);
 
-        }
     }
 
 
     public void render() {
         movement();
+
         SpriteBatch uiBatch = new SpriteBatch();
         System.out.println(playerControlling.facing);
         uiBatch.begin();
+
         stage.draw();
         uiBatch.end();
 
 
     }
 
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
 
 }
 
