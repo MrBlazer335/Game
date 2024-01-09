@@ -70,16 +70,18 @@ public class Movement extends ApplicationAdapter {
         jumpButton.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         jumpButton.setPosition(uiCamera.viewportWidth + uiCamera.viewportWidth / 1.3f, 0);
         jumpButton.setTouchable(Touchable.enabled);
-        jumpButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
+        jumpButton.addListener(new ClickListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 if (jumpButton.isPressed()) {
                     if (playerControlling.jumpCounter == 0 && playerControlling.onTheGround) {
                         jumpButtonDown();
+                        return true;
                     } else if (playerControlling.jumpCounter == 1) {
                         jumpButtonDownTwice();
+                        return true;
                     }
                 }
+                return true;
             }
         });
         stage.addActor(jumpButton);
